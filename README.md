@@ -4,7 +4,7 @@
 
 BLOK is a physical app blocker for Android. Tap an NFC tag to lock distracting apps — tap again to unlock. The physical action is the point: friction you can't swipe away.
 
-🌐 **Website:** https://blokapp.com
+🌐 **Website:** https://blok-app.com
 📦 **Download:** grab the latest APK from [Releases](../../releases)
 
 ## Why BLOK
@@ -19,7 +19,7 @@ BLOK is a physical app blocker for Android. Tap an NFC tag to lock distracting a
 
 ## Why open source
 
-An app that can lock your phone should never be a black box. Every line of BLOK is public so you can verify exactly what it does — and what it doesn't: nothing leaves your device. See the [privacy policy](https://blokapp.com/privacy.html).
+An app that can lock your phone should never be a black box. Every line of BLOK is public so you can verify exactly what it does — and what it doesn't: nothing leaves your device. See the [privacy policy](https://blok-app.com/privacy.html).
 
 ## How it works
 
