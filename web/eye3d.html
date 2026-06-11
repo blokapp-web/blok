@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>BLOK — 3D Eye</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{width:100%;height:100%;overflow:hidden;background:#000}
+  #stage{position:fixed;inset:0}
+  canvas{display:block}
+</style>
+</head>
+<body>
+<div id="stage"></div>
+
+<script type="importmap">
+{ "imports": {
+  "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+  "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+} }
+</script>
+
+<script type="module">
+import * as THREE from 'three';
+import { mergeVertices } from 'three/addons/utils/BufferGeometryUtils.js';
+
+/* ════════════════════════════════════════════════════════
+   BLOK EYE — exact reconstruction from the logo bitmap.
+   Measured proportions (normalized, width = 1):
+     bar:        x -0.5..0.5,  y 0 .. -0.2486
+     arc center: (0, -0.3028)
+     ring outer: R 0.400   ring inner: R 0.266
+     tongue:     R 0.149,  arc center (0, -0.378)
+   Vertical wall sections connect the bar bottom to each arc.
+   ════════════════════════════════════════════════════════ */
+
+const BAR_B   = -0.2486;  // bar bottom (y, three.js = y up)
+const RING_CY = -0.3028;  // ring arcs center y
+const R_OUT   =  0.400;
+const R_IN    =  0.266;
+const TONG_CY = -0.378;   // tongue arc center y
+const R_T     =  0.149;
+
+/* Two clean solids, no holes — exactly how the object reads:
+   A) bar with the tongue hanging from its center
+   B) the C-ring (outer arc + walls + inner arc) */
+function buildBarTongue() {
+  const s = new THREE.Shape();
+  s.moveTo(-0.5, 0);
+  s.lineTo(-0.5, BAR_B);
+  s.lineTo(-R_T, BAR_B);
+  s.lineTo(-R_T, TONG_CY);
+  s.absarc(0, TONG_CY, R_T, Math.PI, 2 * Math.PI, false); // under the tongue
+  s.lineTo(R_T, BAR_B);
+  s.lineTo(0.5, BAR_B);
+  s.lineTo(0.5, 0);
+  s.closePath();
+  return s;
+}
+function buildRing() {
+  const TOP = BAR_B + 0.012; // tuck slightly into the bar
+  const s = new THREE.Shape();
+  s.moveTo(-R_OUT, TOP);
+  s.lineTo(-R_OUT, RING_CY);
+  s.absarc(0, RING_CY, R_OUT, Math.PI, 2 * Math.PI, false); // outer, through bottom
+  s.lineTo(R_OUT, TOP);
+  s.lineTo(R_IN, TOP);
+  s.lineTo(R_IN, RING_CY);
+  s.absarc(0, RING_CY, R_IN, 0, -Math.PI, true);            // inner, back through bottom
+  s.lineTo(-R_IN, TOP);
+  s.closePath();
+  return s;
+}
+
+/* ── scene ── */
+const stage = document.getElementById('stage');
+const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false });
+renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+renderer.setSize(innerWidth, innerHeight);
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.18;
+renderer.outputColorSpace = THREE.SRGBColorSpace;
+stage.appendChild(renderer.domElement);
+
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x000000);
+
+const camera = new THREE.PerspectiveCamera(32, innerWidth / innerHeight, 0.1, 50);
+camera.position.set(0, 0, 3.2);
+
+/* geometry — extruded with soft bevel for premium edges */
+const DEPTH = 0.26;
+const EXTRUDE = {
+  depth: DEPTH,
+  curveSegments: 72,
+  bevelEnabled: true,
+  bevelThickness: 0.014,
+  bevelSize: 0.014,
+  bevelOffset: -0.002,
+  bevelSegments: 6
+};
+function makeGeo(shape) {
+  let g = new THREE.ExtrudeGeometry(shape, EXTRUDE);
+  g = mergeVertices(g, 1e-4);
+  g.computeVertexNormals();
+  return g;
+}
+
+/* white matte premium material */
+const mat = new THREE.MeshStandardMaterial({
+  color: 0xf6f6f6,
+  roughness: 0.5,
+  metalness: 0.02
+});
+
+const eye = new THREE.Group();
+eye.add(new THREE.Mesh(makeGeo(buildBarTongue()), mat));
+eye.add(new THREE.Mesh(makeGeo(buildRing()), mat));
+/* center the assembly: x already symmetric; total y span 0..-0.7028, z 0..DEPTH */
+eye.children.forEach(m => { m.position.set(0, 0.7028 / 2, -DEPTH / 2); });
+
+const rig = new THREE.Group();   // rig carries base pose, eye gets reactive offsets
+rig.add(eye);
+rig.scale.setScalar(1.55);
+scene.add(rig);
+
+/* base pose — like the reference render: slightly from the side, looking down a touch */
+const BASE = new THREE.Euler(0.10, -0.34, 0.02);
+rig.rotation.copy(BASE);
+
+/* ── lighting: soft studio, well-defined volume ── */
+scene.add(new THREE.HemisphereLight(0xffffff, 0x202020, 0.7));
+
+const key = new THREE.DirectionalLight(0xffffff, 2.1);
+key.position.set(-2, 3, 2.8);
+scene.add(key);
+
+const fill = new THREE.DirectionalLight(0xeef2ff, 0.5);
+fill.position.set(-3, 0.5, 2);
+scene.add(fill);
+
+const rim = new THREE.DirectionalLight(0xffffff, 0.65);
+rim.position.set(0, -2, -3);
+scene.add(rim);
+
+/* ── interaction: smooth, inertial, limited; returns to base when idle ── */
+const MAX_RX = 0.16, MAX_RY = 0.30;  // rad — elegant limits
+const IDLE_AFTER = 1800;             // ms
+
+let nx = 0, ny = 0, lastMove = -1e9;
+addEventListener('mousemove', e => {
+  nx = (e.clientX / innerWidth) * 2 - 1;
+  ny = (e.clientY / innerHeight) * 2 - 1;
+  lastMove = performance.now();
+});
+
+let rx = 0, ry = 0;                  // current reactive offsets
+const lerp = (a, b, f) => a + (b - a) * f;
+
+function tick(now) {
+  let tRX, tRY;
+  if (now - lastMove < IDLE_AFTER) {
+    tRX = ny * MAX_RX;
+    tRY = nx * MAX_RY;
+  } else {
+    // very subtle idle breathing around the base pose
+    const t = now * 0.001;
+    tRX = Math.sin(t * 0.5) * 0.018;
+    tRY = Math.sin(t * 0.37 + 1.3) * 0.03;
+  }
+  rx = lerp(rx, tRX, 0.045);
+  ry = lerp(ry, tRY, 0.045);
+  eye.rotation.set(rx, ry, 0);
+  rig.position.y = Math.sin(now * 0.0006) * 0.02; // faint float
+  renderer.render(scene, camera);
+  requestAnimationFrame(tick);
+}
+requestAnimationFrame(tick);
+
+addEventListener('resize', () => {
+  camera.aspect = innerWidth / innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(innerWidth, innerHeight);
+});
+</script>
+</body>
+</html>

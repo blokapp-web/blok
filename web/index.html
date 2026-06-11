@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>BLOK — Your phone. Your rules.</title>
+  <meta name="description" content="The physical app blocker. Tap an NFC tag to lock distracting apps instantly."/>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+
+  <!-- LOADER -->
+  <div id="loader"><img src="assets/img/eye_alpha.png" alt="BLOK" class="ld-eye"/></div>
+
+  <!-- CURSOR TRAIL -->
+  <canvas id="trail"></canvas>
+
+  <!-- NAV -->
+  <nav id="nav">
+    <a href="#" class="n-logo"><img src="assets/img/blok_logo_white_img.png" alt="BLOK"/></a>
+    <div class="n-links">
+      <a href="#how">How it works</a>
+      <a href="#features">Features</a>
+      <a href="#faq">FAQ</a>
+    </div>
+    <a href="#get" class="n-cta">Get BLOK</a>
+    <button id="burger" class="n-burger" aria-label="Menu"><span></span><span></span></button>
+  </nav>
+
+  <!-- MOBILE MENU -->
+  <div id="mmenu" class="mmenu">
+    <a href="#how">How it works</a>
+    <a href="#features">Features</a>
+    <a href="#faq">FAQ</a>
+    <a href="#get" class="mm-cta">Get BLOK</a>
+  </div>
+
+  <!-- ═══════ HERO — editorial, product-first. 3D as identity accent ═══════ -->
+  <header id="hero">
+    <span class="h-meta hm-l">// Physical app blocking</span>
+    <span class="h-meta hm-r">Android &middot; NFC</span>
+    <div class="h-big" aria-hidden="true">BLOK</div>
+    <div class="h-grid">
+      <div class="h-copy">
+        <h1 class="h-title">
+          <span class="h-line"><i>Your phone<b class="ac">.</b></i></span>
+          <span class="h-line"><i>Your rules<b class="ac">.</b></i></span>
+        </h1>
+        <p class="hero-p">BLOK turns any NFC tag into a physical switch for your attention. Tap to lock distracting apps. Tap again to unlock.</p>
+        <div class="hero-btns">
+          <a href="BLOK-v1.0.0.apk" download class="btn-p">Download BLOK <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 17l9.2-9.2M17 17V8H8"/></svg></a>
+          <a href="#how" class="btn-g">See how it works</a>
+        </div>
+        <span class="h-trust">Free forever &middot; 100% offline &middot; No account</span>
+      </div>
+      <div class="h-visual"><div id="hero3d"></div></div>
+    </div>
+    <div class="scroll-cue"><span>SCROLL</span></div>
+  </header>
+
+  <!-- ═══════ MARQUEE — rhythm divider ═══════ -->
+  <div class="marquee" aria-hidden="true">
+    <div class="mq-track">
+      <span>Tap to lock</span><i></i><span>Tap to unlock</span><i></i><span>100% offline</span><i></i><span>No willpower needed</span><i></i><span>Tap to lock</span><i></i><span>Tap to unlock</span><i></i><span>100% offline</span><i></i><span>No willpower needed</span><i></i>
+    </div>
+  </div>
+
+  <!-- ═══════ THE APP — product, not just a pretty phone ═══════ -->
+  <section id="app" class="sec app-sec">
+    <div class="wrap">
+      <p class="label rv">// The app</p>
+      <h2 class="sec-title rv">In your pocket<span class="ac">.</span></h2>
+      <div class="app-grid">
+        <div class="app-show rv">
+        <div class="device-scene">
+          <!-- Floating badges -->
+          <div class="float-badge fb-1"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#4ADE80" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> Protected</div>
+          <div class="float-badge fb-3"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#60A5FA" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> 2h saved today</div>
+          <!-- Phone — replica of the real BLOK app home screen -->
+          <div class="phone">
+            <div class="p-screen">
+              <div class="p-status"><span>21:07</span><span class="p-sig"><i></i><i></i><i></i><b></b></span></div>
+              <div class="p-apphead">
+                <img src="assets/img/blok_logo_white_img.png" alt="" class="p-logoimg"/>
+              </div>
+              <div class="p-toggle">
+                <div class="p-ring r1"></div>
+                <div class="p-ring r2"></div>
+                <div class="p-btn">
+                  <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#F5FF00" stroke-width="1.8"><rect x="3" y="11" width="18" height="11" rx="2.5"/><path d="M7 11V7a5 5 0 0110 0v4"/><circle cx="12" cy="17" r="1.5" fill="#F5FF00" stroke="none"/></svg>
+                </div>
+              </div>
+              <div class="p-spacechip">
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+                STUDY
+              </div>
+              <div class="p-stats">
+                <div class="p-stat"><span class="p-stat-l">TIME</span><span class="p-stat-v">2H 14M</span></div>
+                <div class="p-stat"><span class="p-stat-l">ATTEMPTS</span><span class="p-stat-v">0007</span></div>
+              </div>
+              <div class="p-blocked">
+                <span class="p-blocked-t">Blocked apps</span>
+                <div class="p-chips">
+                  <span class="p-appchip"><i style="--c:#FF6B5B"></i>Instagram</span>
+                  <span class="p-appchip"><i style="--c:#B080FF"></i>TikTok</span>
+                  <span class="p-appchip"><i style="--c:#69D1FF"></i>YouTube</span>
+                  <span class="p-appchip p-add">+ Add</span>
+                </div>
+              </div>
+              <div class="p-emergency">&#9888; EMERGENCY (3)</div>
+              <div class="p-gesture"></div>
+              <div class="p-glare"></div>
+            </div>
+          </div>
+        </div>
+        </div>
+        <div class="app-points">
+          <div class="app-point rv">
+            <span class="ap-n">01</span>
+            <div>
+              <h3>One tap to lock</h3>
+              <p>The lock button is the whole interface. Tap your tag and every distracting app goes dark — no menus, no settings maze.</p>
+            </div>
+          </div>
+          <div class="app-point rv">
+            <span class="ap-n">02</span>
+            <div>
+              <h3>Proof you're winning</h3>
+              <p>Time saved and blocked attempts, tracked on-device. Watch the attempts counter climb while you stay focused.</p>
+            </div>
+          </div>
+          <div class="app-point rv">
+            <span class="ap-n">03</span>
+            <div>
+              <h3>Spaces for every mode</h3>
+              <p>Study, work, sleep — separate blocking profiles you can switch instantly. One tag, many rules.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════ HOW IT WORKS ═══════ -->
+  <section id="how" class="sec">
+    <div class="wrap">
+      <p class="label rv">// How it works</p>
+      <h2 class="sec-title rv">Three taps.<br/><span class="dim">Zero willpower.</span></h2>
+      <div class="steps">
+        <div class="step rv">
+          <div class="step-line"></div>
+          <div class="step-dot"></div>
+          <div class="step-content">
+            <span class="step-n">01</span>
+            <h3>Choose your apps</h3>
+            <p>Select what to block — social media, games, news. Whatever steals your focus.</p>
+          </div>
+        </div>
+        <div class="step rv">
+          <div class="step-line"></div>
+          <div class="step-dot"></div>
+          <div class="step-content">
+            <span class="step-n">02</span>
+            <h3>Tap your NFC tag</h3>
+            <p>Any NFC sticker, card, or keychain. Place it on your desk, wallet — wherever works.</p>
+          </div>
+        </div>
+        <div class="step rv">
+          <div class="step-line"></div>
+          <div class="step-dot"></div>
+          <div class="step-content">
+            <span class="step-n">03</span>
+            <h3>Done. Locked.</h3>
+            <p>Try opening a blocked app — BLOK intercepts it. Tap NFC again to unlock when ready.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════ STATS ═══════ -->
+  <section class="stats-sec">
+    <div class="wrap">
+      <div class="stats-row">
+        <div class="stat rv">
+          <div class="stat-val">0.3<span>s</span></div>
+          <div class="stat-label">to activate BLOK</div>
+        </div>
+        <div class="stat-div"></div>
+        <div class="stat rv">
+          <div class="stat-val">100<span>%</span></div>
+          <div class="stat-label">offline — no cloud</div>
+        </div>
+        <div class="stat-div"></div>
+        <div class="stat rv">
+          <div class="stat-val">0<span></span></div>
+          <div class="stat-label">ads. forever free.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════ FEATURES BENTO ═══════ -->
+  <section id="features" class="sec sec-dark">
+    <div class="wrap">
+      <p class="label rv">// Features</p>
+      <h2 class="sec-title rv">Built different<span class="ac">.</span></h2>
+      <div class="bento">
+        <!-- CORE — large with lock icon -->
+        <div class="b-card b-tall rv">
+          <span class="b-tag">CORE</span>
+          <div class="b-visual">
+            <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="#F5FF00" stroke-width="1"><rect x="3" y="11" width="18" height="11" rx="2.5"/><path d="M7 11V7a5 5 0 0110 0v4"/><circle cx="12" cy="17" r="2" fill="#F5FF00" stroke="none"/></svg>
+          </div>
+          <h3>Physical toggle</h3>
+          <p>One tap to lock, one tap to unlock. The physical action creates a barrier that software blockers can't match.</p>
+        </div>
+        <!-- SPACES -->
+        <div class="b-card rv">
+          <span class="b-tag">SPACES</span>
+          <h3>Focus spaces</h3>
+          <p>Different blocking profiles for work, sleep, study. Switch instantly.</p>
+          <div class="b-deco">
+            <div class="deco-chip">Work</div>
+            <div class="deco-chip chip-active">Study</div>
+            <div class="deco-chip">Sleep</div>
+          </div>
+        </div>
+        <!-- STATS -->
+        <div class="b-card rv">
+          <span class="b-tag tag-green">STATS</span>
+          <div class="b-bars">
+            <div class="bar" style="height:35%"></div>
+            <div class="bar" style="height:55%"></div>
+            <div class="bar" style="height:40%"></div>
+            <div class="bar" style="height:70%"></div>
+            <div class="bar bar-ac" style="height:90%"></div>
+            <div class="bar bar-ac" style="height:75%"></div>
+            <div class="bar bar-ac" style="height:95%"></div>
+          </div>
+          <h3>Progress tracking</h3>
+          <p>Daily streaks, blocked attempts, time saved.</p>
+        </div>
+        <!-- SAFETY -->
+        <div class="b-card rv">
+          <span class="b-tag tag-orange">SAFETY</span>
+          <h3>Emergency unlock</h3>
+          <p>Limited emergency unlocks for genuine urgency. Enough to feel safe.</p>
+        </div>
+        <!-- SMART -->
+        <div class="b-card rv">
+          <span class="b-tag tag-blue">SMART</span>
+          <h3>Notification blocking</h3>
+          <p>Block notifications too. No tempting banners pulling you back.</p>
+        </div>
+        <!-- DESIGN — wide with dot grid -->
+        <div class="b-card b-wide rv">
+          <span class="b-tag tag-purple">DESIGN</span>
+          <h3>Dark & minimal</h3>
+          <p>A brutalist interface built with purpose, not decoration. Gets out of your way.</p>
+          <div class="b-dots">
+            <div class="dot-grid"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════ STATEMENT + PRINCIPLES ═══════ -->
+  <section class="statement-sec">
+    <div class="wrap">
+      <h2 class="statement rv">The average person picks up their phone <em>96 times a day</em>. <br/>BLOK makes every single one <em>intentional</em>.</h2>
+      <div class="principles">
+        <div class="principle rv">
+          <span class="pr-tag">// Trust</span>
+          <h3>Open source<span class="ac">.</span></h3>
+          <p>This matters: an app that can lock your phone should never be a black box. Every line of BLOK's code is public and auditable — you can read exactly what it does, and verify that nothing leaves your device. No hidden tracking, no secrets.</p>
+        </div>
+        <div class="principle rv">
+          <span class="pr-tag">// Freedom</span>
+          <h3>Any NFC tag<span class="ac">.</span></h3>
+          <p>BLOK writes to any standard NFC tag — stickers, cards, keychains, wristbands. Grab one for cents, record it from the app in seconds, and it becomes your physical key. No proprietary hardware, ever.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════ FAQ ═══════ -->
+  <section id="faq" class="sec">
+    <div class="wrap wrap-sm">
+      <p class="label rv">// FAQ</p>
+      <h2 class="sec-title rv">Questions<span class="ac">.</span></h2>
+      <div class="faqs">
+        <div class="fq rv"><button class="fq-q"><span>What NFC tags work with BLOK?</span><span class="fq-i"></span></button><div class="fq-a"><p>Any standard NFC tag — NTAG213, NTAG215, NTAG216. Stickers, cards, keychains, wristbands. Less than $1 each.</p></div></div>
+        <div class="fq rv"><button class="fq-q"><span>Can I bypass it without the tag?</span><span class="fq-i"></span></button><div class="fq-a"><p>You get limited emergency unlocks for genuine urgency. But friction is the point — the tag is your commitment device.</p></div></div>
+        <div class="fq rv"><button class="fq-q"><span>Does it need internet?</span><span class="fq-i"></span></button><div class="fq-a"><p>No. BLOK is 100% offline. No accounts, no cloud, no data collection. Everything lives on your device.</p></div></div>
+        <div class="fq rv"><button class="fq-q"><span>Will it drain my battery?</span><span class="fq-i"></span></button><div class="fq-a"><p>Negligible. Only activates when a blocked app opens — no background polling.</p></div></div>
+        <div class="fq rv"><button class="fq-q"><span>Is BLOK really free?</span><span class="fq-i"></span></button><div class="fq-a"><p>Completely free. No ads, no subscriptions, no in-app purchases. Free forever.</p></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════ CTA ═══════ -->
+  <section id="get" class="sec cta-sec">
+    <div class="wrap">
+      <div class="cta-box rv">
+        <h2>Stop scrolling<span class="ac">.</span><br/>Start living<span class="ac">.</span></h2>
+        <p>Download BLOK, grab any NFC tag, and take back your time.</p>
+        <a href="BLOK-v1.0.0.apk" download class="btn-p btn-lg">Download for Android <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 17l9.2-9.2M17 17V8H8"/></svg></a>
+        <span class="cta-note">Free forever · No account needed · 100% offline</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="wrap ft-row">
+      <div class="ft-l"><img src="assets/img/blok_logo_white_img.png" alt="BLOK" class="ft-logo"/><p>&copy; 2026 BLOK</p></div>
+      <div class="ft-r"><a href="privacy.html">Privacy Policy</a><a href="mailto:blokapp.cont@hotmail.com">Contact</a></div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+
+  <!-- 3D EYE — real geometry, Three.js -->
+  <script type="importmap">
+  { "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+  } }
+  </script>
+  <script type="module">
+  import * as THREE from 'three';
+  import { mergeVertices } from 'three/addons/utils/BufferGeometryUtils.js';
+
+  /* BLOK eye — exact logo proportions (width = 1):
+     bar 0..-0.2486 · arcs center -0.3028 · ring R 0.400/0.266 · tongue R 0.149 @ -0.378 */
+  const BAR_B = -0.2486, RING_CY = -0.3028, R_OUT = 0.400, R_IN = 0.266, TONG_CY = -0.378, R_T = 0.149;
+
+  function barTongue() {
+    const s = new THREE.Shape();
+    s.moveTo(-0.5, 0); s.lineTo(-0.5, BAR_B); s.lineTo(-R_T, BAR_B); s.lineTo(-R_T, TONG_CY);
+    s.absarc(0, TONG_CY, R_T, Math.PI, 2 * Math.PI, false);
+    s.lineTo(R_T, BAR_B); s.lineTo(0.5, BAR_B); s.lineTo(0.5, 0); s.closePath();
+    return s;
+  }
+  function ring() {
+    const TOP = BAR_B + 0.012;
+    const s = new THREE.Shape();
+    s.moveTo(-R_OUT, TOP); s.lineTo(-R_OUT, RING_CY);
+    s.absarc(0, RING_CY, R_OUT, Math.PI, 2 * Math.PI, false);
+    s.lineTo(R_OUT, TOP); s.lineTo(R_IN, TOP); s.lineTo(R_IN, RING_CY);
+    s.absarc(0, RING_CY, R_IN, 0, -Math.PI, true);
+    s.lineTo(-R_IN, TOP); s.closePath();
+    return s;
+  }
+
+  const host = document.getElementById('hero3d');
+  if (host) {
+    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure = 1.18;
+    renderer.outputColorSpace = THREE.SRGBColorSpace;
+    host.appendChild(renderer.domElement);
+
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(32, 1, 0.1, 50);
+    camera.position.set(0, 0, 3.2);
+
+    const DEPTH = 0.26;
+    const EXT = { depth: DEPTH, curveSegments: 72, bevelEnabled: true, bevelThickness: 0.014, bevelSize: 0.014, bevelOffset: -0.002, bevelSegments: 6 };
+    const makeGeo = sh => { let g = new THREE.ExtrudeGeometry(sh, EXT); g = mergeVertices(g, 1e-4); g.computeVertexNormals(); return g; };
+    const mat = new THREE.MeshStandardMaterial({ color: 0xf6f6f6, roughness: 0.5, metalness: 0.02 });
+
+    const eye = new THREE.Group();
+    eye.add(new THREE.Mesh(makeGeo(barTongue()), mat));
+    eye.add(new THREE.Mesh(makeGeo(ring()), mat));
+    eye.children.forEach(m => m.position.set(0, 0.7028 / 2, -DEPTH / 2));
+
+    const rig = new THREE.Group();
+    rig.add(eye);
+    scene.add(rig);
+    rig.rotation.set(0.10, -0.34, 0.02); // base pose
+
+    scene.add(new THREE.HemisphereLight(0xffffff, 0x202020, 0.7));
+    const key = new THREE.DirectionalLight(0xffffff, 2.1); key.position.set(-2, 3, 2.8); scene.add(key);
+    const fill = new THREE.DirectionalLight(0xeef2ff, 0.5); fill.position.set(-3, 0.5, 2); scene.add(fill);
+    const rim = new THREE.DirectionalLight(0xffffff, 0.65); rim.position.set(0, -2, -3); scene.add(rim);
+
+    function size() {
+      const w = host.clientWidth, h = host.clientHeight;
+      renderer.setSize(w, h);
+      camera.aspect = w / h;
+      camera.updateProjectionMatrix();
+      /* fit the side column: scale to the smaller container dimension */
+      const ref = Math.min(w, h);
+      rig.scale.setScalar(Math.min(1.15, Math.max(0.62, ref / 560)));
+    }
+    size();
+    addEventListener('resize', size);
+
+    /* smooth inertial cursor reaction with elegant limits + idle return */
+    const MAX_RX = 0.16, MAX_RY = 0.30, IDLE_AFTER = 1800;
+    let nx = 0, ny = 0, lastMove = -1e9, rx = 0, ry = 0;
+    addEventListener('mousemove', e => {
+      nx = (e.clientX / innerWidth) * 2 - 1;
+      ny = (e.clientY / innerHeight) * 2 - 1;
+      lastMove = performance.now();
+    });
+    const lerp = (a, b, f) => a + (b - a) * f;
+
+    (function tick(now) {
+      let tRX, tRY;
+      if (now - lastMove < IDLE_AFTER) { tRX = ny * MAX_RX; tRY = nx * MAX_RY; }
+      else {
+        const t = now * 0.001;
+        tRX = Math.sin(t * 0.5) * 0.018;
+        tRY = Math.sin(t * 0.37 + 1.3) * 0.03;
+      }
+      rx = lerp(rx, tRX, 0.045);
+      ry = lerp(ry, tRY, 0.045);
+      eye.rotation.set(rx, ry, 0);
+      rig.position.y = Math.sin(now * 0.0006) * 0.02;
+      renderer.render(scene, camera);
+      requestAnimationFrame(tick);
+    })(performance.now());
+  }
+  </script>
+</body>
+</html>

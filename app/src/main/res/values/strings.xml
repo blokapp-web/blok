@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">BLOK</string>
+
+    <!-- Accessibility service -->
+    <string name="accessibility_service_description">BLOK uses the accessibility service exclusively to detect when you open an app you chose to block. It does not collect, store or transmit any personal data. It only checks the foreground app\'s package name to show the block screen.</string>
+
+    <!-- Navigation -->
+    <string name="nav_stats">STATS</string>
+    <string name="nav_home">HOME</string>
+    <string name="nav_settings">SETTINGS</string>
+    <string name="nav_back">Back</string>
+
+    <!-- Home screen -->
+    <string name="home_space">SPACE</string>
+    <string name="home_time">TIME</string>
+    <string name="home_attempts">ATTEMPTS</string>
+    <string name="home_blocked_apps">Blocked apps</string>
+    <string name="home_add">+ Add</string>
+    <string name="home_emergency">EMERGENCY (%d)</string>
+    <string name="home_edit_apps">Edit apps</string>
+
+    <!-- Stats screen -->
+    <string name="stats_your_progress">YOUR PROGRESS</string>
+    <string name="stats_title">Statistics</string>
+    <string name="stats_week">Week</string>
+    <string name="stats_month">Month</string>
+    <string name="stats_streak">STREAK</string>
+    <string name="stats_consecutive_days">consecutive days</string>
+    <string name="stats_attempts">ATTEMPTS</string>
+    <string name="stats_today">today</string>
+    <string name="stats_today_by_app">TODAY BY APP</string>
+    <string name="stats_by_app">BY APP</string>
+    <string name="stats_time_blocked_today">TIME BLOCKED TODAY</string>
+    <string name="stats_improving">Improving this week</string>
+    <string name="stats_attempt_singular">attempt</string>
+    <string name="stats_attempt_plural">attempts</string>
+
+    <!-- Settings screen -->
+    <string name="settings_header">SETTINGS</string>
+    <string name="settings_title">Settings</string>
+    <string name="settings_appearance">APPEARANCE</string>
+    <string name="settings_theme_light">Light</string>
+    <string name="settings_theme_dark">Dark</string>
+    <string name="settings_theme_auto">Auto</string>
+    <string name="settings_nfc">NFC</string>
+    <string name="settings_write_nfc">Write NFC tag</string>
+    <string name="settings_write_nfc_sub">Write your app to an NFC tag</string>
+    <string name="settings_waiting_tag">Waiting for tag…</string>
+    <string name="settings_waiting_tag_sub">Hold the tag near the reader</string>
+    <string name="settings_write">WRITE</string>
+    <string name="settings_cancel">CANCEL</string>
+    <string name="settings_nfc_system">System NFC settings</string>
+    <string name="settings_nfc_system_sub">Device configuration</string>
+    <string name="settings_notifications">NOTIFICATIONS</string>
+    <string name="settings_block_notifications">Block notifications</string>
+    <string name="settings_block_notifications_sub">Hide notifications from blocked apps</string>
+    <string name="settings_enable_notification_access">Enable notification access</string>
+    <string name="settings_general">GENERAL</string>
+    <string name="settings_accessibility">Accessibility</string>
+    <string name="settings_accessibility_sub">Blocking service</string>
+    <string name="settings_device">DEVICE</string>
+    <string name="settings_model">Model</string>
+    <string name="settings_version">Version</string>
+    <string name="settings_language">LANGUAGE</string>
+    <string name="settings_language_title">Language</string>
+    <string name="settings_language_sub">App display language</string>
+
+    <!-- Spaces -->
+    <string name="spaces_title">SPACES</string>
+    <string name="spaces_create">CREATE SPACE</string>
+    <string name="spaces_new">NEW SPACE</string>
+    <string name="spaces_edit">EDIT SPACE</string>
+    <string name="spaces_name">NAME</string>
+    <string name="spaces_name_hint">E.g.: Work, Study, Gym…</string>
+    <string name="spaces_icon">ICON</string>
+    <string name="spaces_apps_next">APPS &gt;&gt;</string>
+    <string name="spaces_apps_selected">%d apps selected</string>
+    <string name="spaces_save">SAVE</string>
+    <string name="spaces_create_btn">CREATE</string>
+    <string name="spaces_apps_count">%d apps</string>
+    <string name="spaces_edit_btn">Edit</string>
+    <string name="spaces_delete_btn">Delete</string>
+
+    <!-- App selection -->
+    <string name="app_select_title">Select\napps</string>
+    <string name="app_select_selected">%d selected</string>
+    <string name="app_select_confirm">CONFIRM (%d)</string>
+    <string name="app_select_search">Search app…</string>
+    <string name="app_select_clear">Clear</string>
+
+    <!-- Block overlay -->
+    <string name="blocked_title">BLOCKED</string>
+    <string name="blocked_nfc_hint">TAP YOUR NFC\nTO UNLOCK</string>
+    <string name="blocked_emergency">EMERGENCY (%d)</string>
+
+    <!-- Toasts / messages -->
+    <string name="toast_blok_on">BLOK activated</string>
+    <string name="toast_blok_off">BLOK deactivated</string>
+    <string name="toast_tag_written">Tag written</string>
+    <string name="toast_read_only">Read only</string>
+    <string name="toast_no_space">Not enough space</string>
+    <string name="toast_not_ndef">Not NDEF compatible</string>
+    <string name="toast_error">Error: %s</string>
+    <string name="toast_emergency_unlock">Emergency unlock</string>
+    <string name="toast_no_emergency_left">No emergency unlocks left</string>
+    <string name="toast_emergency_remaining">Emergency unlock. You have %d left</string>
+
+    <!-- Alert -->
+    <string name="alert_accessibility">Enable Accessibility to block apps</string>
+
+    <!-- Unauthorized -->
+    <string name="unauthorized_title">UNAUTHORIZED DEVICE</string>
+
+    <!-- Language names (always in their own language) -->
+    <string name="lang_en">English</string>
+    <string name="lang_es">Español</string>
+    <string name="lang_fr">Français</string>
+    <string name="lang_de">Deutsch</string>
+    <string name="lang_pt">Português</string>
+    <string name="lang_it">Italiano</string>
+    <string name="lang_system">System</string>
+</resources>

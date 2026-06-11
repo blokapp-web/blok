@@ -1,0 +1,38 @@
+*.iml
+.gradle
+/local.properties
+/.idea
+.DS_Store
+/build
+app/build
+/captures
+.externalNativeBuild
+.cxx
+local.properties
+.kotlin/
+
+# Signing keys & credentials — NEVER commit
+*.jks
+*.keystore
+keystore.properties
+
+# Binaries (published via Releases, not the repo)
+*.apk
+*.aab
+
+# Deploy working copy
+/deploy
+
+# Design working files (not part of the product)
+/PNG
+/spacemono_temp
+*.ai
+/Screenshot_1.png
+/icon_preview3.png
+/ICONO.png
+/Sin*
+/eye_alpha.png
+/LOGO.png
+/privacy-policy.html
+/.claude
+

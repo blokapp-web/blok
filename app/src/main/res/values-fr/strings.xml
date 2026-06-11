@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="accessibility_service_description">BLOK utilise le service d\'accessibilité uniquement pour détecter quand vous ouvrez une app que vous avez choisi de bloquer. Il ne collecte, stocke ni transmet aucune donnée personnelle.</string>
+
+    <string name="nav_stats">STATS</string>
+    <string name="nav_home">ACCUEIL</string>
+    <string name="nav_settings">RÉGLAGES</string>
+    <string name="nav_back">Retour</string>
+
+    <string name="home_space">ESPACE</string>
+    <string name="home_time">TEMPS</string>
+    <string name="home_attempts">TENTATIVES</string>
+    <string name="home_blocked_apps">Apps bloquées</string>
+    <string name="home_add">+ Ajouter</string>
+    <string name="home_emergency">URGENCE (%d)</string>
+
+    <string name="stats_your_progress">VOS PROGRÈS</string>
+    <string name="stats_title">Statistiques</string>
+    <string name="stats_week">Semaine</string>
+    <string name="stats_month">Mois</string>
+    <string name="stats_streak">SÉRIE</string>
+    <string name="stats_consecutive_days">jours conséc.</string>
+    <string name="stats_attempts">TENTATIVES</string>
+    <string name="stats_today">aujourd\'hui</string>
+    <string name="stats_today_by_app">AUJOURD\'HUI PAR APP</string>
+    <string name="stats_by_app">PAR APP</string>
+    <string name="stats_time_blocked_today">TEMPS BLOQUÉ AUJOURD\'HUI</string>
+    <string name="stats_improving">En amélioration cette semaine</string>
+    <string name="stats_attempt_singular">tentative</string>
+    <string name="stats_attempt_plural">tentatives</string>
+
+    <string name="settings_header">CONFIGURATION</string>
+    <string name="settings_title">Réglages</string>
+    <string name="settings_appearance">APPARENCE</string>
+    <string name="settings_theme_light">Clair</string>
+    <string name="settings_theme_dark">Sombre</string>
+    <string name="settings_theme_auto">Auto</string>
+    <string name="settings_nfc">NFC</string>
+    <string name="settings_write_nfc">Écrire un tag NFC</string>
+    <string name="settings_write_nfc_sub">Écrivez votre app sur un tag NFC</string>
+    <string name="settings_waiting_tag">En attente du tag…</string>
+    <string name="settings_waiting_tag_sub">Approchez le tag du lecteur</string>
+    <string name="settings_write">ÉCRIRE</string>
+    <string name="settings_cancel">ANNULER</string>
+    <string name="settings_nfc_system">Réglages NFC système</string>
+    <string name="settings_nfc_system_sub">Configuration de l\'appareil</string>
+    <string name="settings_notifications">NOTIFICATIONS</string>
+    <string name="settings_block_notifications">Bloquer les notifications</string>
+    <string name="settings_block_notifications_sub">Masquer les notifications des apps bloquées</string>
+    <string name="settings_enable_notification_access">Activer l\'accès aux notifications</string>
+    <string name="settings_general">GÉNÉRAL</string>
+    <string name="settings_accessibility">Accessibilité</string>
+    <string name="settings_accessibility_sub">Service de blocage</string>
+    <string name="settings_device">APPAREIL</string>
+    <string name="settings_model">Modèle</string>
+    <string name="settings_version">Version</string>
+    <string name="settings_language">LANGUE</string>
+    <string name="settings_language_title">Langue</string>
+    <string name="settings_language_sub">Langue d\'affichage</string>
+
+    <string name="spaces_title">ESPACES</string>
+    <string name="spaces_create">CRÉER UN ESPACE</string>
+    <string name="spaces_new">NOUVEL ESPACE</string>
+    <string name="spaces_edit">MODIFIER L\'ESPACE</string>
+    <string name="spaces_name">NOM</string>
+    <string name="spaces_name_hint">Ex : Travail, Études, Sport…</string>
+    <string name="spaces_icon">ICÔNE</string>
+    <string name="spaces_apps_next">APPS &gt;&gt;</string>
+    <string name="spaces_apps_selected">%d apps sélectionnées</string>
+    <string name="spaces_save">ENREGISTRER</string>
+    <string name="spaces_create_btn">CRÉER</string>
+    <string name="spaces_apps_count">%d apps</string>
+    <string name="spaces_edit_btn">Modifier</string>
+    <string name="spaces_delete_btn">Supprimer</string>
+
+    <string name="app_select_title">Sélectionner\ndes apps</string>
+    <string name="app_select_selected">%d sélectionnées</string>
+    <string name="app_select_confirm">CONFIRMER (%d)</string>
+    <string name="app_select_search">Rechercher…</string>
+    <string name="app_select_clear">Effacer</string>
+
+    <string name="blocked_title">BLOQUÉ</string>
+    <string name="blocked_nfc_hint">APPROCHEZ VOTRE NFC\nPOUR DÉBLOQUER</string>
+    <string name="blocked_emergency">URGENCE (%d)</string>
+
+    <string name="toast_blok_on">BLOK activé</string>
+    <string name="toast_blok_off">BLOK désactivé</string>
+    <string name="toast_tag_written">Tag écrit</string>
+    <string name="toast_read_only">Lecture seule</string>
+    <string name="toast_no_space">Pas assez d\'espace</string>
+    <string name="toast_not_ndef">Non compatible NDEF</string>
+    <string name="toast_error">Erreur : %s</string>
+    <string name="toast_emergency_unlock">Déverrouillage d\'urgence</string>
+    <string name="toast_no_emergency_left">Plus de déverrouillages d\'urgence</string>
+    <string name="toast_emergency_remaining">Déverrouillage d\'urgence. Il vous en reste %d</string>
+
+    <string name="alert_accessibility">Activez l\'accessibilité pour bloquer des apps</string>
+    <string name="unauthorized_title">APPAREIL NON AUTORISÉ</string>
+
+    <string name="lang_en">English</string>
+    <string name="lang_es">Español</string>
+    <string name="lang_fr">Français</string>
+    <string name="lang_de">Deutsch</string>
+    <string name="lang_pt">Português</string>
+    <string name="lang_it">Italiano</string>
+    <string name="lang_system">Système</string>
+</resources>
