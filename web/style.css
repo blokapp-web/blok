@@ -14,7 +14,7 @@
   --bg2:#0a0a0a;
   --surface:#111;
   --card:#0d0d0d;
-  --border:#1a1a1a;
+  --border:#333;
   --ac:#F5FF00;
   --ac-dim:rgba(245,255,0,.12);
   --green:#4ADE80;
@@ -22,8 +22,8 @@
   --orange:#FB923C;
   --purple:#A78BFA;
   --txt:#e8e8e8;
-  --txt2:#888;
-  --txt3:#555;
+  --txt2:#a8a8a8;
+  --txt3:#7a7a7a;
   --dm:'DM',monospace;
   --sm:'SM','Courier New',monospace;
   --ease:cubic-bezier(.22,1,.36,1);
@@ -58,7 +58,7 @@ img{max-width:100%;display:block}
 .sec-dark{background:var(--bg2)}
 
 /* ── Nav ── */
-#nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 32px;height:var(--nav-h);background:rgba(5,5,5,.65);backdrop-filter:blur(20px) saturate(1.4);-webkit-backdrop-filter:blur(20px) saturate(1.4);border-bottom:1px solid rgba(255,255,255,.04);transition:transform .4s var(--ease)}
+#nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 32px;height:var(--nav-h);background:rgba(5,5,5,.65);backdrop-filter:blur(20px) saturate(1.4);-webkit-backdrop-filter:blur(20px) saturate(1.4);border-bottom:1px solid rgba(255,255,255,.13);transition:transform .4s var(--ease)}
 #nav.hide{transform:translateY(-100%)}
 .n-logo img{height:22px;opacity:.9}
 .n-links{display:flex;gap:32px}
