@@ -10,11 +10,15 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.activity.addCallback
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.MutableTransitionState
 import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.scaleIn
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -40,6 +44,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -54,6 +59,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.appblocker.AppBlockerApplication
 import com.appblocker.R
+import com.appblocker.ui.theme.BlokMotion
 import com.appblocker.ui.theme.NeonYellow
 import com.appblocker.ui.theme.DotMatrix
 import com.appblocker.ui.theme.SpaceMono
@@ -193,12 +199,20 @@ private fun BlockOverlayScreen(
         label = "nfc"
     )
 
+    // One-shot entrance: soft fade + scale so the overlay never pops in harshly
+    val entrance = remember { MutableTransitionState(false).apply { targetState = true } }
+
     Box(
         modifier = Modifier
             .fillMaxSize()
             .background(Color.Black),
         contentAlignment = Alignment.Center
     ) {
+        AnimatedVisibility(
+            visibleState = entrance,
+            enter = fadeIn(tween(BlokMotion.Base, easing = BlokMotion.Ease)) +
+                    scaleIn(tween(BlokMotion.Base, easing = BlokMotion.Ease), initialScale = 0.96f)
+        ) {
         Column(
             modifier = Modifier.padding(horizontal = 40.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -300,6 +314,7 @@ private fun BlockOverlayScreen(
                     )
                 }
             }
+        }
         }
     }
 }

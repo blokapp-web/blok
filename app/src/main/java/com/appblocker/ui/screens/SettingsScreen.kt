@@ -4,7 +4,11 @@ import android.content.ComponentName
 import android.content.Intent
 import android.provider.Settings
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.animation.expandVertically
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkVertically
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.foundation.background
@@ -41,6 +45,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -53,6 +58,7 @@ import com.appblocker.data.AppLanguage
 import com.appblocker.data.ThemeMode
 import com.appblocker.ui.components.GlassBackground
 import com.appblocker.ui.components.GlassCard
+import com.appblocker.ui.theme.BlokMotion
 import com.appblocker.ui.theme.DotMatrix
 import com.appblocker.ui.theme.SpaceMono
 
@@ -157,19 +163,20 @@ fun SettingsScreen(
                                 color = primaryC
                             )
                         }
+                        val themeChevron by animateFloatAsState(if (themeExpanded) 180f else 0f, tween(BlokMotion.Base, easing = BlokMotion.Ease), label = "chv")
                         Icon(
-                            if (themeExpanded) Icons.Default.KeyboardArrowUp else Icons.Default.KeyboardArrowDown,
+                            Icons.Default.KeyboardArrowDown,
                             contentDescription = null,
                             tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.4f),
-                            modifier = Modifier.size(22.dp)
+                            modifier = Modifier.size(22.dp).rotate(themeChevron)
                         )
                     }
 
                     // ── Dropdown ──
                     AnimatedVisibility(
                         visible = themeExpanded,
-                        enter = expandVertically(),
-                        exit = shrinkVertically()
+                        enter = expandVertically(tween(BlokMotion.Base, easing = BlokMotion.Ease)) + fadeIn(tween(BlokMotion.Base)),
+                        exit = shrinkVertically(tween(BlokMotion.Base, easing = BlokMotion.Ease)) + fadeOut(tween(BlokMotion.Fast))
                     ) {
                         Column {
                             ItemDivider()
@@ -280,19 +287,20 @@ fun SettingsScreen(
                                 color = primary
                             )
                         }
+                        val langChevron by animateFloatAsState(if (languageExpanded) 180f else 0f, tween(BlokMotion.Base, easing = BlokMotion.Ease), label = "chv2")
                         Icon(
-                            if (languageExpanded) Icons.Default.KeyboardArrowUp else Icons.Default.KeyboardArrowDown,
+                            Icons.Default.KeyboardArrowDown,
                             contentDescription = null,
                             tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.4f),
-                            modifier = Modifier.size(22.dp)
+                            modifier = Modifier.size(22.dp).rotate(langChevron)
                         )
                     }
 
                     // ── Dropdown list (animated) ──
                     AnimatedVisibility(
                         visible = languageExpanded,
-                        enter = expandVertically(),
-                        exit = shrinkVertically()
+                        enter = expandVertically(tween(BlokMotion.Base, easing = BlokMotion.Ease)) + fadeIn(tween(BlokMotion.Base)),
+                        exit = shrinkVertically(tween(BlokMotion.Base, easing = BlokMotion.Ease)) + fadeOut(tween(BlokMotion.Fast))
                     ) {
                         Column {
                             ItemDivider()

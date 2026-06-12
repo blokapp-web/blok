@@ -78,6 +78,7 @@ import com.appblocker.ui.screens.SpacesScreen
 import com.appblocker.ui.screens.StatsScreen
 import com.appblocker.ui.theme.AppBlockerTheme
 import com.appblocker.ui.theme.SpaceMono
+import com.appblocker.ui.theme.pressScale
 import com.appblocker.util.DeviceGuard
 import com.appblocker.viewmodel.AppSelectionViewModel
 import com.appblocker.viewmodel.SpacesViewModel
@@ -346,8 +347,10 @@ private fun IndustrialNav(selectedTab: Int, onTabSelected: (Int) -> Unit, modifi
             if (isCenterSel) onPrimary else muted,
             spring(stiffness = Spring.StiffnessMediumLow), label = "ct"
         )
+        val centerSource = remember { MutableInteractionSource() }
         Box(
             modifier = Modifier
+                .pressScale(centerSource)
                 .size(56.dp)
                 .clip(RoundedCornerShape(16.dp))
                 .background(centerBg)
@@ -356,7 +359,7 @@ private fun IndustrialNav(selectedTab: Int, onTabSelected: (Int) -> Unit, modifi
                     if (isCenterSel) primary else subtleBorder,
                     RoundedCornerShape(16.dp)
                 )
-                .clickable(remember { MutableInteractionSource() }, null) { onTabSelected(1) },
+                .clickable(centerSource, null) { onTabSelected(1) },
             contentAlignment = Alignment.Center
         ) {
             Icon(
@@ -385,9 +388,11 @@ private fun SideNavItem(filled: ImageVector, outlined: ImageVector, label: Strin
         if (selected) primary else muted,
         spring(stiffness = Spring.StiffnessMediumLow), label = "t"
     )
+    val source = remember { MutableInteractionSource() }
     Column(
         modifier = Modifier
-            .clickable(remember { MutableInteractionSource() }, null, onClick = onClick)
+            .pressScale(source)
+            .clickable(source, null, onClick = onClick)
             .padding(horizontal = 4.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {

@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BLOK — Screenshot Generator</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --ac:#F5FF00;
+  --bg:#060606;
+  --text:#fff;
+  --t2:rgba(255,255,255,.55);
+  --t3:rgba(255,255,255,.28);
+  --t4:rgba(255,255,255,.14);
+  --glass:rgba(255,255,255,.055);
+  --gborder:rgba(255,255,255,.08);
+  --mono:'Space Mono',monospace;
+  --sg:'Space Grotesk',sans-serif;
+}
+body{background:#0a0a0a;color:var(--text);font-family:var(--sg);padding:56px 32px 80px}
+
+.page-header{text-align:center;margin-bottom:48px}
+.page-header h1{font-family:var(--mono);font-size:10px;letter-spacing:.28em;color:var(--ac);text-transform:uppercase;margin-bottom:10px}
+.page-header p{font-size:13px;color:#333;letter-spacing:.04em}
+
+.btn-all{display:block;margin:0 auto 56px;background:var(--ac);color:#000;font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;padding:14px 36px;border:none;cursor:pointer;border-radius:2px}
+.btn-all:hover{opacity:.85}
+
+.gallery{display:flex;flex-wrap:wrap;gap:56px 48px;justify-content:center;align-items:flex-start}
+.slide-wrap{display:flex;flex-direction:column;align-items:center;gap:14px}
+.slide-label{font-family:var(--mono);font-size:10px;letter-spacing:.18em;color:#2a2a2a;text-transform:uppercase}
+.btn-dl{background:transparent;border:1px solid #1e1e1e;color:#2a2a2a;font-family:var(--mono);font-size:10px;letter-spacing:.14em;padding:9px 22px;cursor:pointer;border-radius:2px}
+.btn-dl:hover{border-color:var(--ac);color:var(--ac)}
+
+/* ── FEATURE GRAPHIC ── */
+.fg-section{margin:80px 0 0;text-align:center}
+.fg-section h2{font-family:var(--mono);font-size:10px;letter-spacing:.28em;color:var(--ac);text-transform:uppercase;margin-bottom:10px}
+.fg-section p{font-size:13px;color:#333;letter-spacing:.04em;margin-bottom:28px}
+.fg{
+  width:512px;height:250px;background:#060606;
+  position:relative;overflow:hidden;
+  margin:0 auto;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 52px;
+}
+.fg-left{display:flex;flex-direction:column;gap:0;z-index:2;position:relative}
+.fg-tag{font-family:var(--mono);font-size:7px;letter-spacing:.26em;color:rgba(245,255,0,.55);text-transform:uppercase;margin-bottom:10px}
+.fg-logo{font-family:var(--mono);font-weight:700;font-size:64px;letter-spacing:.06em;color:#fff;line-height:1}
+.fg-logo em{font-style:normal;color:var(--ac)}
+.fg-sub{font-family:var(--mono);font-size:8.5px;letter-spacing:.12em;color:rgba(255,255,255,.35);text-transform:uppercase;margin-top:12px;line-height:1.8}
+.fg-badge{margin-top:14px;background:var(--ac);border-radius:3px;padding:5px 12px;display:inline-block;font-family:var(--mono);font-weight:700;font-size:7px;letter-spacing:.18em;color:#000;text-transform:uppercase}
+.fg-right{position:relative;z-index:2;flex-shrink:0}
+.fg-phone{width:88px;height:182px;background:#000;border-radius:16px;border:1px solid #1e1e1e;overflow:hidden;position:relative;box-shadow:0 0 0 1px #0d0d0d,0 16px 48px rgba(0,0,0,.9)}
+.fg-phone::before{content:'';position:absolute;top:5px;left:50%;transform:translateX(-50%);width:24px;height:4px;background:#0d0d0d;border-radius:2px;z-index:10}
+.fg-scr{position:absolute;inset:0;background:#050505;padding:14px 7px 7px;display:flex;flex-direction:column;align-items:center}
+.fg-blok{font-family:var(--mono);font-weight:700;font-size:6px;letter-spacing:.22em;color:#fff;margin-bottom:4px}
+.fg-rings{position:relative;width:64px;height:64px;margin:2px auto;flex-shrink:0}
+.fg-rings i{position:absolute;border-radius:50%;border:.5px solid;top:50%;left:50%;transform:translate(-50%,-50%)}
+.fg-rings .r1{width:64px;height:64px;border-color:rgba(245,255,0,.28)}
+.fg-rings .r2{width:48px;height:48px;border-color:rgba(245,255,0,.16)}
+.fg-rings .r3{width:32px;height:32px;border-color:rgba(245,255,0,.10)}
+.fg-rings .gr{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:40px;height:40px;border-radius:50%;background:radial-gradient(circle,rgba(245,255,0,.3) 0%,transparent 70%)}
+.fg-lsq{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:20px;height:20px;border-radius:6px;background:rgba(245,255,0,.18);border:1px solid rgba(245,255,0,.55);display:flex;align-items:center;justify-content:center}
+.fg-lk{width:7px;height:6px;background:var(--ac);border-radius:1px;position:relative;margin-top:3px}
+.fg-lk::before{content:'';position:absolute;top:-4px;left:50%;transform:translateX(-50%);width:5px;height:4px;border:1px solid var(--ac);border-bottom:none;border-radius:3px 3px 0 0}
+.fg-chip{background:var(--ac);border-radius:8px;padding:3px 8px;font-family:var(--mono);font-weight:700;font-size:4.5px;letter-spacing:.1em;color:#000;margin:4px 0}
+.fg-gcards{display:flex;gap:3px;width:100%}
+.fg-gc{flex:1;background:rgba(255,255,255,.055);border:1px solid rgba(255,255,255,.08);border-radius:5px;padding:4px 5px}
+.fg-gcl{font-family:var(--mono);font-weight:700;font-size:3.5px;letter-spacing:.15em;color:rgba(255,255,255,.28)}
+.fg-gcv{font-family:var(--mono);font-weight:700;font-size:7px;color:#fff}
+.fg-glow{position:absolute;top:-60px;right:-60px;width:280px;height:280px;background:radial-gradient(circle,rgba(245,255,0,.07) 0%,transparent 65%);pointer-events:none}
+.fg-glow2{position:absolute;bottom:-80px;left:-40px;width:240px;height:240px;background:radial-gradient(circle,rgba(245,255,0,.04) 0%,transparent 65%);pointer-events:none}
+.fg-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(245,255,0,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(245,255,0,.025) 1px,transparent 1px);background-size:32px 32px;pointer-events:none}
+
+/* ── SLIDE BASE ── */
+.slide{
+  width:360px;height:640px;
+  position:relative;overflow:hidden;
+  flex-shrink:0;background:var(--bg);
+  display:flex;flex-direction:column;
+  align-items:center;
+}
+
+/* ── COPY AREA (top) ── */
+.copy{
+  width:100%;padding:44px 28px 0;
+  flex-shrink:0;position:relative;z-index:2;
+}
+.tag{
+  font-family:var(--mono);font-size:8px;letter-spacing:.24em;
+  color:var(--ac);opacity:.65;text-transform:uppercase;
+  display:block;margin-bottom:9px;
+}
+.hl{
+  font-family:var(--mono);font-weight:700;font-size:26px;
+  line-height:1.08;letter-spacing:.02em;text-transform:uppercase;color:var(--text);
+  margin-bottom:10px;
+}
+.hl em{font-style:normal;color:var(--ac)}
+.insight{
+  font-size:11px;font-weight:300;line-height:1.7;
+  color:rgba(255,255,255,.38);letter-spacing:.01em;
+}
+
+/* ── PHONE FRAME ── */
+.ph-wrap{
+  flex:1;width:100%;display:flex;
+  align-items:flex-end;justify-content:center;
+  padding-bottom:0;position:relative;z-index:1;
+  overflow:hidden;
+}
+.ph{
+  width:190px;height:390px;
+  background:#000;border-radius:28px;
+  border:1.5px solid #222;
+  overflow:hidden;
+  box-shadow:0 0 0 1px #0e0e0e,0 24px 64px rgba(0,0,0,.85);
+  position:relative;flex-shrink:0;
+  margin-bottom:0;
+}
+.ph::before{
+  content:'';position:absolute;top:8px;left:50%;
+  transform:translateX(-50%);width:44px;height:6px;
+  background:#0d0d0d;border-radius:3px;z-index:10;
+}
+.scr{
+  position:absolute;inset:0;background:#050505;
+  padding:22px 11px 10px;
+  display:flex;flex-direction:column;overflow:hidden;
+}
+
+/* ── GLOW OVERLAY ── */
+.glow-bg{
+  position:absolute;pointer-events:none;z-index:0;
+}
+
+/* ── APP ATOMS ── */
+.blok-logo{
+  font-family:var(--mono);font-weight:700;
+  font-size:10px;letter-spacing:.3em;color:var(--text);
+  flex-shrink:0;
+}
+
+.rings{position:relative;width:130px;height:130px;margin:4px auto;flex-shrink:0}
+.rings i{position:absolute;border-radius:50%;border:1px solid;top:50%;left:50%;transform:translate(-50%,-50%)}
+.rings .r1{width:130px;height:130px}
+.rings .r2{width:100px;height:100px}
+.rings .r3{width:65px;height:65px;border-width:.5px}
+.rings.on .r1{border-color:rgba(245,255,0,.28)}
+.rings.on .r2{border-color:rgba(245,255,0,.16)}
+.rings.on .r3{border-color:rgba(245,255,0,.10)}
+.rings.off .r1{border-color:rgba(255,255,255,.06)}
+.rings.off .r2{border-color:rgba(255,255,255,.04)}
+.rings.off .r3{border-color:rgba(255,255,255,.02)}
+.rings .glow-r{
+  position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+  width:84px;height:84px;border-radius:50%;
+  background:radial-gradient(circle,rgba(245,255,0,.28) 0%,rgba(245,255,0,.06) 55%,transparent 75%);
+}
+
+.locksq{
+  position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+  width:38px;height:38px;border-radius:12px;
+  display:flex;align-items:center;justify-content:center;
+}
+.locksq.on{background:rgba(245,255,0,.18);border:1.5px solid rgba(245,255,0,.55)}
+.locksq.off{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1)}
+.lk{position:relative;width:14px;height:10px;border-radius:2px;margin-top:5px}
+.locksq.on .lk{background:var(--ac)}
+.locksq.off .lk{background:rgba(255,255,255,.3)}
+.lk::before{
+  content:'';position:absolute;top:-6px;left:50%;transform:translateX(-50%);
+  width:8px;height:7px;border:1.5px solid;border-bottom:none;border-radius:4px 4px 0 0;
+}
+.locksq.on .lk::before{border-color:var(--ac)}
+.locksq.off .lk::before{border-color:rgba(255,255,255,.3)}
+
+.chip-space{
+  align-self:center;background:var(--ac);border-radius:14px;
+  padding:5px 13px;font-family:var(--mono);font-weight:700;
+  font-size:7.5px;letter-spacing:.12em;color:#000;margin:3px 0 8px;
+  flex-shrink:0;
+}
+
+.gcards{display:flex;gap:6px;margin-bottom:6px;flex-shrink:0}
+.gcard{flex:1;background:var(--glass);border:1px solid var(--gborder);border-radius:10px;padding:8px 9px}
+.gc-lbl{font-family:var(--mono);font-weight:700;font-size:5.5px;letter-spacing:.18em;color:var(--t3);margin-bottom:4px}
+.gc-val{font-family:var(--mono);font-weight:700;font-size:12px;letter-spacing:.04em;color:var(--text)}
+
+.apps-card{background:var(--glass);border:1px solid var(--gborder);border-radius:10px;padding:9px 10px;flex-shrink:0}
+.apps-title{font-size:8px;font-weight:600;color:var(--text);margin-bottom:6px}
+.apps-flow{display:flex;flex-wrap:wrap;gap:4px}
+.achip{display:flex;align-items:center;gap:3px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:9px;padding:3px 7px}
+.achip b{width:3.5px;height:3.5px;border-radius:50%;flex-shrink:0}
+.achip span{font-size:7px;font-weight:500;color:rgba(255,255,255,.75)}
+.achip.add{background:transparent}
+.achip.add span{color:var(--t3)}
+
+.emg{
+  margin-top:auto;text-align:center;font-family:var(--mono);
+  font-weight:700;font-size:6.5px;letter-spacing:.1em;
+  color:rgba(255,107,91,.5);padding-top:4px;flex-shrink:0;
+}
+
+/* ── SLIDE 1 — HOME ── */
+.s1 .glow-bg{top:-80px;right:-80px;width:360px;height:360px;
+  background:radial-gradient(circle,rgba(245,255,0,.07) 0%,transparent 65%)}
+
+/* ── SLIDE 2 — BLOCKED ── */
+.s2 .copy .hl{font-size:22px}
+.blocked-big{
+  font-family:var(--mono);font-weight:700;font-size:18px;
+  letter-spacing:.14em;color:var(--ac);text-align:center;margin-top:0;flex-shrink:0;
+}
+.nfc-hint{
+  font-family:var(--mono);font-weight:700;font-size:7px;
+  letter-spacing:.16em;color:var(--t2);text-align:center;
+  line-height:2;margin-top:8px;flex-shrink:0;
+}
+.s2 .glow-bg{
+  top:50%;left:50%;transform:translate(-50%,-50%);
+  width:500px;height:500px;
+  background:radial-gradient(circle,rgba(245,255,0,.04) 0%,transparent 60%);
+}
+
+/* ── SLIDE 3 — SPACES ── */
+.sp-head{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:9px;flex-shrink:0}
+.sp-title{font-family:var(--mono);font-weight:700;font-size:11px;letter-spacing:.2em;color:var(--text)}
+.sp-cnt{font-family:var(--mono);font-size:6px;letter-spacing:.12em;color:var(--t3)}
+.sp-card{
+  display:flex;align-items:center;gap:8px;
+  background:var(--glass);border:1px solid var(--gborder);
+  border-radius:11px;padding:8px 10px;margin-bottom:5px;flex-shrink:0;
+}
+.sp-card.active{border-color:rgba(245,255,0,.4);background:rgba(245,255,0,.04)}
+.sp-ic{width:24px;height:24px;border-radius:7px;background:rgba(255,255,255,.06);display:flex;align-items:center;justify-content:center;font-size:9px;flex-shrink:0}
+.sp-card.active .sp-ic{background:rgba(245,255,0,.12)}
+.sp-nm{font-size:9px;font-weight:600;color:var(--text)}
+.sp-ap{font-size:7px;color:var(--t3);margin-top:1px}
+.sp-chk{margin-left:auto;width:14px;height:14px;border-radius:50%;background:var(--ac);color:#000;font-size:7px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.sp-create{
+  margin-top:6px;border:1px dashed rgba(245,255,0,.35);border-radius:11px;
+  padding:8px;text-align:center;font-family:var(--mono);font-weight:700;
+  font-size:6.5px;letter-spacing:.18em;color:var(--ac);flex-shrink:0;
+}
+
+/* ── SLIDE 4 — STATS ── */
+.st-over{font-family:var(--mono);font-weight:700;font-size:6px;letter-spacing:.22em;color:var(--t3);flex-shrink:0}
+.st-h1{font-size:14px;font-weight:600;color:var(--text);margin:2px 0 7px;flex-shrink:0}
+.st-toggle{display:flex;background:var(--glass);border:1px solid var(--gborder);border-radius:8px;padding:2px;margin-bottom:7px;flex-shrink:0}
+.st-toggle span{flex:1;text-align:center;font-family:var(--mono);font-weight:700;font-size:6.5px;letter-spacing:.1em;padding:4px;border-radius:6px;color:var(--t3)}
+.st-toggle .on{background:var(--ac);color:#000}
+.st-cards{display:flex;gap:6px;margin-bottom:7px;flex-shrink:0}
+.st-c{flex:1;background:var(--glass);border:1px solid var(--gborder);border-radius:10px;padding:8px 10px}
+.st-c .l{font-family:var(--mono);font-weight:700;font-size:5px;letter-spacing:.18em;color:var(--t3)}
+.st-c .v{font-family:var(--mono);font-weight:700;font-size:20px;color:var(--ac);line-height:1.15}
+.st-c .s{font-size:6px;color:var(--t3)}
+.st-sec{font-family:var(--mono);font-weight:700;font-size:5.5px;letter-spacing:.2em;color:var(--t3);margin:3px 0 5px;flex-shrink:0}
+.bar-row{display:flex;align-items:center;gap:6px;margin-bottom:5px;flex-shrink:0}
+.bar-nm{width:40px;font-size:7px;font-weight:500;color:rgba(255,255,255,.7);flex-shrink:0}
+.bar-tr{flex:1;height:4px;border-radius:2px;background:rgba(255,255,255,.05);overflow:hidden}
+.bar-f{height:100%;border-radius:2px;background:var(--ac)}
+.bar-n{width:12px;font-family:var(--mono);font-size:6.5px;color:var(--t2);text-align:right;flex-shrink:0}
+.st-foot{
+  margin-top:auto;background:var(--glass);border:1px solid var(--gborder);
+  border-radius:10px;padding:8px 10px;display:flex;
+  justify-content:space-between;align-items:center;flex-shrink:0;
+}
+.st-foot .t{font-family:var(--mono);font-weight:700;font-size:5px;letter-spacing:.16em;color:var(--t3)}
+.st-foot .v{font-family:var(--mono);font-weight:700;font-size:11px;color:var(--text);margin-top:2px}
+.st-foot .up{font-size:6px;color:#4ADE80}
+
+/* ── SLIDE 5 — OPEN SOURCE ── */
+.s5-checks{display:flex;flex-direction:column;gap:0;flex-shrink:0}
+.ck{display:flex;align-items:center;gap:10px;padding:6px 0;border-bottom:1px solid rgba(255,255,255,.05)}
+.ck:last-child{border-bottom:none}
+.ck-box{width:14px;height:14px;border:1px solid var(--ac);border-radius:3px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.ck-box::after{content:'✓';font-size:8px;color:var(--ac);line-height:1}
+.ck-txt{font-family:var(--mono);font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--text)}
+.s5-gh{
+  margin-top:auto;border:1px solid #1c1c1c;border-radius:11px;
+  padding:12px 14px;display:flex;align-items:center;justify-content:space-between;
+  flex-shrink:0;
+}
+.s5-gh .l{font-family:var(--mono);font-size:7.5px;letter-spacing:.08em;color:var(--t3)}
+.s5-gh .a{font-family:var(--mono);font-size:7.5px;color:var(--ac)}
+.s5-foot{
+  margin-top:8px;font-family:var(--mono);font-size:7px;
+  letter-spacing:.14em;color:#1e1e1e;text-transform:uppercase;
+  text-align:center;flex-shrink:0;padding-bottom:4px;
+}
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <h1>// BLOK — Play Store screenshots</h1>
+  <p>5 slides · exported at 1080 × 1920 px · open in Chrome and click Download</p>
+</div>
+
+<button class="btn-all" onclick="downloadAll()">Download all 5 PNGs</button>
+
+<div class="gallery">
+
+  <!-- ═══ 01 · HOME ═══ -->
+  <div class="slide-wrap">
+    <span class="slide-label">01 — Home</span>
+    <div class="slide s1" id="s1">
+      <div class="glow-bg"></div>
+      <div class="copy">
+        <span class="tag">// Physical app blocking</span>
+        <div class="hl">Your phone<em>.</em><br>Your rules<em>.</em></div>
+        <p class="insight">Lock distracting apps. The only key is your NFC sticker — not a button on your screen.</p>
+      </div>
+      <div class="ph-wrap">
+        <div class="ph">
+          <div class="scr">
+            <span class="blok-logo">BLOK</span>
+            <div class="rings on">
+              <i class="r1"></i><i class="r2"></i><i class="r3"></i>
+              <div class="glow-r"></div>
+              <div class="locksq on"><div class="lk"></div></div>
+            </div>
+            <div class="chip-space">⌂ WORK</div>
+            <div class="gcards">
+              <div class="gcard"><div class="gc-lbl">TIME</div><div class="gc-val">2H 14M</div></div>
+              <div class="gcard"><div class="gc-lbl">ATTEMPTS</div><div class="gc-val">0047</div></div>
+            </div>
+            <div class="apps-card">
+              <div class="apps-title">Blocked apps</div>
+              <div class="apps-flow">
+                <div class="achip"><b style="background:#FF6B5B"></b><span>Instagram</span></div>
+                <div class="achip"><b style="background:#B080FF"></b><span>TikTok</span></div>
+                <div class="achip"><b style="background:#69D1FF"></b><span>YouTube</span></div>
+                <div class="achip"><b style="background:#F5FF00"></b><span>X</span></div>
+                <div class="achip"><b style="background:#FFAA50"></b><span>Reddit</span></div>
+                <div class="achip add"><span>+ Add</span></div>
+              </div>
+            </div>
+            <div class="emg">⚠ EMERGENCY (3)</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <button class="btn-dl" onclick="dl('s1','blok-01-home')">Download PNG</button>
+  </div>
+
+  <!-- ═══ 02 · BLOCKED OVERLAY ═══ -->
+  <div class="slide-wrap">
+    <span class="slide-label">02 — Tap to unlock</span>
+    <div class="slide s2" id="s2">
+      <div class="glow-bg"></div>
+      <div class="copy">
+        <span class="tag">// The physical key</span>
+        <div class="hl">Can't be<br>dismissed<em>.</em></div>
+        <p class="insight">Open a blocked app and this is all you get. No bypass button — just the tag on your desk.</p>
+      </div>
+      <div class="ph-wrap">
+        <div class="ph">
+          <div class="scr" style="align-items:center;justify-content:center;gap:0">
+            <div class="rings on" style="margin:0 0 8px">
+              <i class="r1"></i><i class="r2"></i><i class="r3"></i>
+              <div class="glow-r"></div>
+              <div class="locksq on"><div class="lk"></div></div>
+            </div>
+            <div class="blocked-big">BLOCKED</div>
+            <div style="font-family:var(--mono);font-size:7px;color:rgba(255,255,255,.2);margin-top:3px;letter-spacing:.06em">Instagram</div>
+            <div style="height:24px"></div>
+            <div style="display:flex;flex-direction:column;align-items:center;gap:6px">
+              <div style="width:18px;height:18px;opacity:.4">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M20 2H4C2.9 2 2 2.9 2 4V22L6 18H20C21.1 18 22 17.1 22 16V4C22 2.9 21.1 2 20 2Z" fill="#F5FF00"/>
+                  <rect x="7" y="7" width="10" height="2" rx="1" fill="#000"/>
+                  <rect x="7" y="11" width="7" height="2" rx="1" fill="#000"/>
+                </svg>
+              </div>
+              <div class="nfc-hint">TAP YOUR NFC<br>TO UNLOCK</div>
+            </div>
+            <div class="emg" style="margin-top:12px">⚠ EMERGENCY (3)</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <button class="btn-dl" onclick="dl('s2','blok-02-blocked')">Download PNG</button>
+  </div>
+
+  <!-- ═══ 03 · SPACES ═══ -->
+  <div class="slide-wrap">
+    <span class="slide-label">03 — Spaces</span>
+    <div class="slide s3" id="s3">
+      <div class="copy">
+        <span class="tag">// Focus spaces</span>
+        <div class="hl">One tag per<br>moment<em>.</em></div>
+        <p class="insight">Study, work, sleep — each space blocks its own set of apps. Switch context by tapping.</p>
+      </div>
+      <div class="ph-wrap">
+        <div class="ph">
+          <div class="scr">
+            <div class="sp-head">
+              <span class="sp-title">SPACES</span>
+              <span class="sp-cnt">4 SPACES</span>
+            </div>
+            <div class="sp-card active">
+              <div class="sp-ic">📚</div>
+              <div><div class="sp-nm">Study</div><div class="sp-ap">6 apps blocked</div></div>
+              <div class="sp-chk">✓</div>
+            </div>
+            <div class="sp-card">
+              <div class="sp-ic">💼</div>
+              <div><div class="sp-nm">Work</div><div class="sp-ap">5 apps blocked</div></div>
+            </div>
+            <div class="sp-card">
+              <div class="sp-ic">🌙</div>
+              <div><div class="sp-nm">Sleep</div><div class="sp-ap">8 apps blocked</div></div>
+            </div>
+            <div class="sp-card">
+              <div class="sp-ic">🏋️</div>
+              <div><div class="sp-nm">Gym</div><div class="sp-ap">3 apps blocked</div></div>
+            </div>
+            <div class="sp-create">+ CREATE SPACE</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <button class="btn-dl" onclick="dl('s3','blok-03-spaces')">Download PNG</button>
+  </div>
+
+  <!-- ═══ 04 · STATS ═══ -->
+  <div class="slide-wrap">
+    <span class="slide-label">04 — Progress</span>
+    <div class="slide s4" id="s4">
+      <div class="copy">
+        <span class="tag">// Your progress</span>
+        <div class="hl">Proof it's<br>working<em>.</em></div>
+        <p class="insight">Streaks, blocked attempts, time reclaimed — all on your device. Watch the curve drop.</p>
+      </div>
+      <div class="ph-wrap">
+        <div class="ph">
+          <div class="scr">
+            <span class="st-over">YOUR PROGRESS</span>
+            <div class="st-h1">Statistics</div>
+            <div class="st-toggle"><span class="on">Week</span><span>Month</span></div>
+            <div class="st-cards">
+              <div class="st-c"><div class="l">STREAK</div><div class="v">6</div><div class="s">consecutive days</div></div>
+              <div class="st-c"><div class="l">ATTEMPTS</div><div class="v">12</div><div class="s">today</div></div>
+            </div>
+            <div class="st-sec">TODAY BY APP</div>
+            <div class="bar-row"><span class="bar-nm">Instagram</span><div class="bar-tr"><div class="bar-f" style="width:78%"></div></div><span class="bar-n">14</span></div>
+            <div class="bar-row"><span class="bar-nm">TikTok</span><div class="bar-tr"><div class="bar-f" style="width:50%;opacity:.75"></div></div><span class="bar-n">9</span></div>
+            <div class="bar-row"><span class="bar-nm">YouTube</span><div class="bar-tr"><div class="bar-f" style="width:28%;opacity:.5"></div></div><span class="bar-n">5</span></div>
+            <div class="bar-row"><span class="bar-nm">Reddit</span><div class="bar-tr"><div class="bar-f" style="width:17%;opacity:.35"></div></div><span class="bar-n">3</span></div>
+            <div class="st-foot">
+              <div><div class="t">TIME BLOCKED TODAY</div><div class="v">2H 14M</div></div>
+              <span class="up">▲ improving</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <button class="btn-dl" onclick="dl('s4','blok-04-stats')">Download PNG</button>
+  </div>
+
+  <!-- ═══ 05 · OPEN & PRIVATE ═══ -->
+  <div class="slide-wrap">
+    <span class="slide-label">05 — Open &amp; private</span>
+    <div class="slide s5" id="s5">
+      <div class="copy">
+        <span class="tag">// Open &amp; private</span>
+        <div class="hl">Open<em>.</em> Private<em>.</em><br>Yours<em>.</em></div>
+        <p class="insight">No account. No internet. No ads. Every line of code is public on GitHub.</p>
+      </div>
+      <div class="ph-wrap">
+        <div class="ph">
+          <div class="scr" style="justify-content:space-between">
+            <div class="s5-checks">
+              <div class="ck"><div class="ck-box"></div><span class="ck-txt">No account</span></div>
+              <div class="ck"><div class="ck-box"></div><span class="ck-txt">No internet</span></div>
+              <div class="ck"><div class="ck-box"></div><span class="ck-txt">No analytics</span></div>
+              <div class="ck"><div class="ck-box"></div><span class="ck-txt">No ads. Ever.</span></div>
+              <div class="ck"><div class="ck-box"></div><span class="ck-txt">Free forever</span></div>
+            </div>
+            <div>
+              <div class="s5-gh">
+                <span class="l">Every line is public</span>
+                <span class="a">github ↗</span>
+              </div>
+              <div class="s5-foot">GPL-3.0 · 100% on-device</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <button class="btn-dl" onclick="dl('s5','blok-05-private')">Download PNG</button>
+  </div>
+
+</div>
+
+<!-- ═══ FEATURE GRAPHIC 1024×500 ═══ -->
+<div class="fg-section">
+  <h2>// Feature graphic — 1024 × 500 px</h2>
+  <p>Play Store banner · exported at 1024 × 500 px</p>
+  <button class="btn-all" style="margin-bottom:28px" onclick="dlFg()">Download Feature Graphic PNG</button>
+  <div class="fg" id="fg">
+    <div class="fg-grid"></div>
+    <div class="fg-glow"></div>
+    <div class="fg-glow2"></div>
+    <div class="fg-left">
+      <span class="fg-tag">// App blocker · NFC unlock · Open source</span>
+      <div class="fg-logo">BL<em>O</em>K</div>
+      <div class="fg-sub">The app blocker you can't cheat.<br>Use an NFC sticker to unlock.</div>
+      <span class="fg-badge">Free · Open Source · No ads</span>
+    </div>
+    <div class="fg-right">
+      <div class="fg-phone">
+        <div class="fg-scr">
+          <span class="fg-blok">BLOK</span>
+          <div class="fg-rings">
+            <i class="r1"></i><i class="r2"></i><i class="r3"></i>
+            <div class="gr"></div>
+            <div class="fg-lsq"><div class="fg-lk"></div></div>
+          </div>
+          <div class="fg-chip">⌂ WORK</div>
+          <div class="fg-gcards">
+            <div class="fg-gc"><div class="fg-gcl">TIME</div><div class="fg-gcv">2H14</div></div>
+            <div class="fg-gc"><div class="fg-gcl">ATTEMPTS</div><div class="fg-gcv">47</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div style="margin-top:14px">
+    <button class="btn-dl" onclick="dlFg()">Download PNG</button>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script>
+async function capture(id, name) {
+  const el = document.getElementById(id);
+  const canvas = await html2canvas(el, {
+    scale: 3,
+    backgroundColor: '#060606',
+    useCORS: true,
+    logging: false,
+    width: 360,
+    height: 640
+  });
+  const a = document.createElement('a');
+  a.download = name + '.png';
+  a.href = canvas.toDataURL('image/png');
+  a.click();
+}
+async function dl(id, name) {
+  const btn = event.currentTarget;
+  const orig = btn.textContent;
+  btn.textContent = 'Capturing…';
+  try { await capture(id, name); } finally { btn.textContent = orig; }
+}
+async function dlFg() {
+  const el = document.getElementById('fg');
+  const btn = event.currentTarget;
+  const orig = btn.textContent;
+  btn.textContent = 'Capturing…';
+  try {
+    const canvas = await html2canvas(el, {
+      scale: 2,
+      backgroundColor: '#060606',
+      useCORS: true,
+      logging: false,
+      width: 512,
+      height: 250
+    });
+    const a = document.createElement('a');
+    a.download = 'blok-feature-graphic.png';
+    a.href = canvas.toDataURL('image/png');
+    a.click();
+  } finally { btn.textContent = orig; }
+}
+async function downloadAll() {
+  const slides = [
+    ['s1','blok-01-home'],['s2','blok-02-blocked'],
+    ['s3','blok-03-spaces'],['s4','blok-04-stats'],['s5','blok-05-private']
+  ];
+  const btn = event.currentTarget;
+  btn.textContent = 'Generating…';
+  for (const [id, name] of slides) {
+    await capture(id, name);
+    await new Promise(r => setTimeout(r, 600));
+  }
+  btn.textContent = 'Download all 5 PNGs';
+}
+</script>
+</body>
+</html>

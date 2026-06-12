@@ -1,9 +1,11 @@
 package com.appblocker.ui.screens
 
 import android.graphics.drawable.Drawable
+import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.core.snap
+import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -55,9 +57,13 @@ import com.appblocker.R
 import com.appblocker.data.AppAttemptCount
 import com.appblocker.ui.components.GlassBackground
 import com.appblocker.ui.components.GlassCard
+import com.appblocker.ui.theme.Appear
+import com.appblocker.ui.theme.BlokMotion
 import com.appblocker.ui.theme.GreenSuccess
 import com.appblocker.ui.theme.DotMatrix
 import com.appblocker.ui.theme.SpaceMono
+import com.appblocker.ui.theme.animatedCount
+import com.appblocker.ui.theme.rememberAppearState
 import com.appblocker.viewmodel.DayStats
 import com.appblocker.viewmodel.StatsViewModel
 import kotlinx.coroutines.Dispatchers
@@ -78,6 +84,7 @@ fun StatsScreen(viewModel: StatsViewModel) {
 
     val weekLabel = stringResource(R.string.stats_week)
     val monthLabel = stringResource(R.string.stats_month)
+    val appearState = rememberAppearState()
 
     GlassBackground {
         if (state.isLoading) {
@@ -95,6 +102,8 @@ fun StatsScreen(viewModel: StatsViewModel) {
                 item { Spacer(Modifier.height(14.dp)) }
 
                 item {
+                    Appear(appearState, 0) {
+                    Column {
                     Text(
                         stringResource(R.string.stats_your_progress),
                         fontFamily = SpaceMono,
@@ -112,22 +121,35 @@ fun StatsScreen(viewModel: StatsViewModel) {
                         color = onSurf,
                         letterSpacing = (-1.5).sp
                     )
+                    }
+                    }
                 }
 
                 // Toggle
                 item {
+                    Appear(appearState, 1) {
                     GlassCard(Modifier.fillMaxWidth(), cornerRadius = 12.dp) {
                         Row(Modifier.padding(4.dp)) {
                             listOf("week" to weekLabel, "month" to monthLabel).forEach { (id, label) ->
+                                val isSel = viewMode == id
+                                val segBg by animateColorAsState(
+                                    if (isSel) onSurf.copy(alpha = 0.08f) else Color.Transparent,
+                                    spring(stiffness = Spring.StiffnessMediumLow), label = "segBg"
+                                )
+                                val segBorder by animateColorAsState(
+                                    if (isSel) primary.copy(alpha = 0.3f) else Color.Transparent,
+                                    spring(stiffness = Spring.StiffnessMediumLow), label = "segBr"
+                                )
+                                val segText by animateColorAsState(
+                                    if (isSel) primary else dim.copy(alpha = 0.4f),
+                                    spring(stiffness = Spring.StiffnessMediumLow), label = "segTx"
+                                )
                                 Box(
                                     Modifier
                                         .weight(1f)
                                         .clip(RoundedCornerShape(8.dp))
-                                        .background(if (viewMode == id) onSurf.copy(alpha = 0.08f) else Color.Transparent)
-                                        .then(
-                                            if (viewMode == id) Modifier.border(1.dp, primary.copy(alpha = 0.3f), RoundedCornerShape(8.dp))
-                                            else Modifier
-                                        )
+                                        .background(segBg)
+                                        .border(1.dp, segBorder, RoundedCornerShape(8.dp))
                                         .clickable { viewMode = id }
                                         .padding(vertical = 9.dp),
                                     contentAlignment = Alignment.Center
@@ -137,17 +159,19 @@ fun StatsScreen(viewModel: StatsViewModel) {
                                         fontFamily = SpaceMono,
                                         fontSize = 11.sp,
                                         fontWeight = FontWeight.Bold,
-                                        color = if (viewMode == id) primary else dim.copy(alpha = 0.4f),
+                                        color = segText,
                                         letterSpacing = 1.sp
                                     )
                                 }
                             }
                         }
                     }
+                    }
                 }
 
                 // Calendar
                 item {
+                    Appear(appearState, 2) {
                     GlassCard(modifier = Modifier.fillMaxWidth()) {
                         androidx.compose.animation.Crossfade(
                             targetState = viewMode,
@@ -161,13 +185,15 @@ fun StatsScreen(viewModel: StatsViewModel) {
                             }
                         }
                     }
+                    }
                 }
 
                 // Big stat
-                item { BigStatCard(state.todayBlockedMinutes, state.weeklyData, state.selectedDate, onSurf, dim) }
+                item { Appear(appearState, 3) { BigStatCard(state.todayBlockedMinutes, state.weeklyData, state.selectedDate, onSurf, dim) } }
 
                 // Mini cards
                 item {
+                    Appear(appearState, 4) {
                     Row(Modifier.fillMaxWidth(), Arrangement.spacedBy(12.dp)) {
                         GlassCard(Modifier.weight(1f)) {
                             Column(Modifier.padding(20.dp)) {
@@ -181,7 +207,7 @@ fun StatsScreen(viewModel: StatsViewModel) {
                                 )
                                 Spacer(Modifier.height(12.dp))
                                 Text(
-                                    "${state.streak}",
+                                    "${animatedCount(state.streak)}",
                                     fontFamily = SpaceMono,
                                     fontSize = 42.sp,
                                     fontWeight = FontWeight.Bold,
@@ -205,7 +231,7 @@ fun StatsScreen(viewModel: StatsViewModel) {
                                 )
                                 Spacer(Modifier.height(12.dp))
                                 Text(
-                                    String.format("%02d", state.todayAttempts),
+                                    String.format("%02d", animatedCount(state.todayAttempts)),
                                     fontFamily = SpaceMono,
                                     fontSize = 42.sp,
                                     fontWeight = FontWeight.Bold,
@@ -218,6 +244,7 @@ fun StatsScreen(viewModel: StatsViewModel) {
                             }
                         }
                     }
+                    }
                 }
 
                 if (state.topApps.isNotEmpty()) {
@@ -229,11 +256,13 @@ fun StatsScreen(viewModel: StatsViewModel) {
                             fontWeight = FontWeight.Bold,
                             color = dim,
                             letterSpacing = 2.sp,
-                            modifier = Modifier.padding(top = 4.dp)
+                            modifier = Modifier.padding(top = 4.dp).animateItem()
                         )
                     }
                     items(state.topApps, key = { it.packageName }) { app ->
-                        AppStatItem(app, state.topApps.first().count, state.todayBlockedMinutes, onSurf, dim)
+                        Box(Modifier.animateItem()) {
+                            AppStatItem(app, state.topApps.first().count, state.todayBlockedMinutes, onSurf, dim)
+                        }
                     }
                 }
 
@@ -502,7 +531,8 @@ private fun AppStatItem(app: AppAttemptCount, maxC: Int, totalMin: Long, onSurf:
         }
     }
 
-    val fraction = remember(app.count, maxC) { if (maxC > 0) app.count.toFloat() / maxC else 0f }
+    val targetFraction = remember(app.count, maxC) { if (maxC > 0) app.count.toFloat() / maxC else 0f }
+    val fraction by animateFloatAsState(targetFraction, tween(500, easing = BlokMotion.Ease), label = "frac")
     val appMin = remember(totalMin, app.count, maxC) { (totalMin * app.count) / maxC.coerceAtLeast(1) }
     val h = appMin / 60; val m = appMin % 60
     val timeStr = if (h > 0) "${h}h ${m}m" else "${m}m"

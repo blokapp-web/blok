@@ -177,10 +177,12 @@ fun AppSelectionScreen(
                             items = apps,
                             key = { it.packageName }
                         ) { app ->
-                            AppListItem(
-                                app = app,
-                                onToggle = { viewModel.toggleApp(app) }
-                            )
+                            Box(Modifier.animateItem()) {
+                                AppListItem(
+                                    app = app,
+                                    onToggle = { viewModel.toggleApp(app) }
+                                )
+                            }
                         }
                     }
                 }

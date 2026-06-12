@@ -1,11 +1,18 @@
 package com.appblocker.ui.screens
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -35,6 +42,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -49,8 +57,10 @@ import com.appblocker.R
 import com.appblocker.data.SpaceWithApps
 import com.appblocker.ui.components.GlassBackground
 import com.appblocker.ui.components.GlassCard
+import com.appblocker.ui.theme.BlokMotion
 import com.appblocker.ui.theme.DotMatrix
 import com.appblocker.ui.theme.SpaceMono
+import com.appblocker.ui.theme.pressScale
 import com.appblocker.ui.util.getSpaceIcon
 import com.appblocker.viewmodel.SpacesViewModel
 
@@ -115,26 +125,31 @@ fun SpacesScreen(
                 modifier = Modifier.weight(1f)
             ) {
                 items(spaces, key = { it.space.id }) { spaceWithApps ->
-                    SpaceCard(
-                        spaceWithApps = spaceWithApps,
-                        isActive = spaceWithApps.space.id == activeSpaceId,
-                        onActivate = {
-                            if (spaceWithApps.space.id == activeSpaceId) {
-                                viewModel.deactivateSpace()
-                            } else {
-                                viewModel.activateSpace(spaceWithApps.space.id)
-                            }
-                        },
-                        onEdit = { onEditSpace(spaceWithApps.space.id) },
-                        onDelete = { viewModel.deleteSpace(spaceWithApps.space.id) }
-                    )
+                    Box(Modifier.animateItem()) {
+                        SpaceCard(
+                            spaceWithApps = spaceWithApps,
+                            isActive = spaceWithApps.space.id == activeSpaceId,
+                            onActivate = {
+                                if (spaceWithApps.space.id == activeSpaceId) {
+                                    viewModel.deactivateSpace()
+                                } else {
+                                    viewModel.activateSpace(spaceWithApps.space.id)
+                                }
+                            },
+                            onEdit = { onEditSpace(spaceWithApps.space.id) },
+                            onDelete = { viewModel.deleteSpace(spaceWithApps.space.id) }
+                        )
+                    }
                 }
 
                 // ── Create new space button ──
                 item {
                     Spacer(modifier = Modifier.height(4.dp))
+                    val createSource = remember { MutableInteractionSource() }
                     Row(
                         modifier = Modifier
+                            .animateItem()
+                            .pressScale(createSource)
                             .fillMaxWidth()
                             .clip(RoundedCornerShape(16.dp))
                             .border(
@@ -142,7 +157,7 @@ fun SpacesScreen(
                                 MaterialTheme.colorScheme.outline.copy(alpha = 0.3f),
                                 RoundedCornerShape(16.dp)
                             )
-                            .clickable(onClick = onCreateSpace)
+                            .clickable(interactionSource = createSource, indication = null, onClick = onCreateSpace)
                             .padding(20.dp),
                         horizontalArrangement = Arrangement.Center,
                         verticalAlignment = Alignment.CenterVertically
@@ -200,14 +215,24 @@ private fun SpaceCard(
         if (isActive) primary.copy(alpha = 0.08f) else MaterialTheme.colorScheme.surfaceContainer,
         spring(stiffness = Spring.StiffnessMediumLow), label = "bgc"
     )
+    val iconBg by animateColorAsState(
+        if (isActive) primary.copy(alpha = 0.2f) else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.06f),
+        spring(stiffness = Spring.StiffnessMediumLow), label = "ibg"
+    )
+    val iconTint by animateColorAsState(
+        if (isActive) primary else onSurf.copy(alpha = 0.5f),
+        spring(stiffness = Spring.StiffnessMediumLow), label = "itn"
+    )
+    val cardSource = remember { MutableInteractionSource() }
 
     Box(
         modifier = Modifier
+            .pressScale(cardSource)
             .fillMaxWidth()
             .clip(RoundedCornerShape(16.dp))
             .background(bgColor)
             .border(1.dp, borderColor, RoundedCornerShape(16.dp))
-            .clickable(onClick = onActivate)
+            .clickable(interactionSource = cardSource, indication = null, onClick = onActivate)
     ) {
         Row(
             modifier = Modifier
@@ -220,10 +245,7 @@ private fun SpaceCard(
                 modifier = Modifier
                     .size(48.dp)
                     .clip(RoundedCornerShape(14.dp))
-                    .background(
-                        if (isActive) primary.copy(alpha = 0.2f)
-                        else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.06f)
-                    ),
+                    .background(iconBg),
                 contentAlignment = Alignment.Center
             ) {
                 Icon(
@@ -231,7 +253,7 @@ private fun SpaceCard(
                     else (iconEntry?.outlined ?: Icons.Filled.Check),
                     contentDescription = null,
                     modifier = Modifier.size(24.dp),
-                    tint = if (isActive) primary else onSurf.copy(alpha = 0.5f)
+                    tint = iconTint
                 )
             }
 
@@ -267,8 +289,15 @@ private fun SpaceCard(
                 }
             }
 
-            // Active indicator
-            if (isActive) {
+            // Active indicator — pops in with a gentle spring
+            AnimatedVisibility(
+                visible = isActive,
+                enter = scaleIn(
+                    spring(dampingRatio = Spring.DampingRatioMediumBouncy, stiffness = Spring.StiffnessMedium),
+                    initialScale = 0.5f
+                ) + fadeIn(tween(BlokMotion.Fast)),
+                exit = scaleOut(tween(BlokMotion.Fast), targetScale = 0.5f) + fadeOut(tween(BlokMotion.Fast))
+            ) {
                 Box(
                     modifier = Modifier
                         .size(28.dp)

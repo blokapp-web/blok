@@ -4,18 +4,29 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.drawable.Drawable
 import android.provider.Settings
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
+import androidx.compose.animation.shrinkVertically
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
@@ -74,8 +85,12 @@ import androidx.core.graphics.drawable.toBitmap
 import com.appblocker.R
 import com.appblocker.ui.components.GlassBackground
 import com.appblocker.ui.components.GlassCard
+import com.appblocker.ui.theme.Appear
+import com.appblocker.ui.theme.BlokMotion
 import com.appblocker.ui.theme.RedSoft
 import com.appblocker.ui.theme.SpaceMono
+import com.appblocker.ui.theme.animatedCount
+import com.appblocker.ui.theme.pressScale
 import com.appblocker.ui.util.getSpaceIcon
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -126,26 +141,35 @@ fun HomeScreen(
 
             Spacer(modifier = Modifier.height(12.dp))
 
-            if (!accessibilityEnabled) {
-                AlertPill(context)
-                Spacer(modifier = Modifier.height(12.dp))
+            AnimatedVisibility(
+                visible = !accessibilityEnabled,
+                enter = fadeIn(tween(BlokMotion.Base, easing = BlokMotion.Ease)) + expandVertically(tween(BlokMotion.Base, easing = BlokMotion.Ease)),
+                exit = fadeOut(tween(BlokMotion.Fast)) + shrinkVertically(tween(BlokMotion.Base, easing = BlokMotion.Ease))
+            ) {
+                Column {
+                    AlertPill(context)
+                    Spacer(modifier = Modifier.height(12.dp))
+                }
             }
 
             // ── CIRCLE HERO ──
-            CircleHero(isBlocking = isBlocking)
+            Appear(0) { CircleHero(isBlocking = isBlocking) }
 
             Spacer(modifier = Modifier.height(16.dp))
 
             // ── ACTIVE SPACE CHIP ──
             val primary = MaterialTheme.colorScheme.primary
             val onPrimary = MaterialTheme.colorScheme.onPrimary
+            val chipSource = remember { MutableInteractionSource() }
+            Appear(1) {
             if (activeSpaceName != null) {
                 val iconEntry = activeSpaceIcon?.let { getSpaceIcon(it) }
                 Row(
                     modifier = Modifier
+                        .pressScale(chipSource)
                         .clip(RoundedCornerShape(24.dp))
                         .background(primary)
-                        .clickable(onClick = onOpenSpaces)
+                        .clickable(interactionSource = chipSource, indication = null, onClick = onOpenSpaces)
                         .padding(horizontal = 20.dp, vertical = 10.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
@@ -171,10 +195,11 @@ fun HomeScreen(
                 // No space active — visible primary-outlined button
                 Row(
                     modifier = Modifier
+                        .pressScale(chipSource)
                         .clip(RoundedCornerShape(24.dp))
                         .background(primary.copy(alpha = 0.08f))
                         .border(1.5.dp, primary.copy(alpha = 0.4f), RoundedCornerShape(24.dp))
-                        .clickable(onClick = onOpenSpaces)
+                        .clickable(interactionSource = chipSource, indication = null, onClick = onOpenSpaces)
                         .padding(horizontal = 22.dp, vertical = 10.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
@@ -196,10 +221,12 @@ fun HomeScreen(
                     )
                 }
             }
+            }
 
             Spacer(modifier = Modifier.height(16.dp))
 
             // ── STATS ROW ──
+            Appear(2) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(10.dp)
@@ -215,8 +242,9 @@ fun HomeScreen(
                             letterSpacing = 2.sp
                         )
                         Spacer(modifier = Modifier.height(8.dp))
-                        val h = blockedMinutes / 60
-                        val m = blockedMinutes % 60
+                        val animMinutes = animatedCount(blockedMinutes.toInt())
+                        val h = animMinutes / 60
+                        val m = animMinutes % 60
                         Text(
                             "${h}H  ${String.format("%02d", m)}M",
                             fontFamily = SpaceMono,
@@ -239,7 +267,7 @@ fun HomeScreen(
                         )
                         Spacer(modifier = Modifier.height(8.dp))
                         Text(
-                            String.format("%04d", todayAttempts),
+                            String.format("%04d", animatedCount(todayAttempts)),
                             fontFamily = SpaceMono,
                             fontSize = 22.sp,
                             fontWeight = FontWeight.Bold,
@@ -249,10 +277,12 @@ fun HomeScreen(
                     }
                 }
             }
+            }
 
             Spacer(modifier = Modifier.height(10.dp))
 
             // ── APPS BLOQUEADAS (chip style) ──
+            Appear(3) {
             GlassCard(modifier = Modifier.fillMaxWidth()) {
                 Column(modifier = Modifier.padding(18.dp)) {
                     Text(
@@ -297,22 +327,29 @@ fun HomeScreen(
                     }
                 }
             }
+            }
 
-            if (isBlocking && emergencyUsesLeft > 0) {
-                Spacer(modifier = Modifier.height(16.dp))
-                TextButton(
-                    onClick = onEmergencyUnlock,
-                    colors = ButtonDefaults.textButtonColors(contentColor = RedSoft.copy(alpha = 0.5f))
-                ) {
-                    Icon(Icons.Default.Warning, null, Modifier.size(14.dp))
-                    Spacer(modifier = Modifier.width(6.dp))
-                    Text(
-                        String.format(stringResource(R.string.home_emergency), emergencyUsesLeft),
-                        fontFamily = SpaceMono,
-                        fontSize = 10.sp,
-                        fontWeight = FontWeight.Bold,
-                        letterSpacing = 1.sp
-                    )
+            AnimatedVisibility(
+                visible = isBlocking && emergencyUsesLeft > 0,
+                enter = fadeIn(tween(BlokMotion.Base, easing = BlokMotion.Ease)) + expandVertically(tween(BlokMotion.Base, easing = BlokMotion.Ease)),
+                exit = fadeOut(tween(BlokMotion.Fast)) + shrinkVertically(tween(BlokMotion.Base, easing = BlokMotion.Ease))
+            ) {
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    Spacer(modifier = Modifier.height(16.dp))
+                    TextButton(
+                        onClick = onEmergencyUnlock,
+                        colors = ButtonDefaults.textButtonColors(contentColor = RedSoft.copy(alpha = 0.5f))
+                    ) {
+                        Icon(Icons.Default.Warning, null, Modifier.size(14.dp))
+                        Spacer(modifier = Modifier.width(6.dp))
+                        Text(
+                            String.format(stringResource(R.string.home_emergency), emergencyUsesLeft),
+                            fontFamily = SpaceMono,
+                            fontSize = 10.sp,
+                            fontWeight = FontWeight.Bold,
+                            letterSpacing = 1.sp
+                        )
+                    }
                 }
             }
 
@@ -422,28 +459,50 @@ private fun CircleHero(isBlocking: Boolean) {
             )
         }
 
+        // Lock square: every property springs between states; icon swaps with scale+fade
+        val sqSize by animateDpAsState(if (isBlocking) 72.dp else 64.dp, spring(stiffness = Spring.StiffnessMediumLow), label = "sq")
+        val sqCorner by animateDpAsState(if (isBlocking) 20.dp else 18.dp, spring(stiffness = Spring.StiffnessMediumLow), label = "sc")
+        val sqBg by animateColorAsState(
+            if (isBlocking) accent.copy(alpha = 0.2f) else lockBgIdle,
+            spring(stiffness = Spring.StiffnessMediumLow), label = "sb"
+        )
+        val sqBorder by animateColorAsState(
+            if (isBlocking) accent.copy(alpha = 0.6f) else lockBorderIdle,
+            spring(stiffness = Spring.StiffnessMediumLow), label = "sbr"
+        )
+        val sqTint by animateColorAsState(
+            if (isBlocking) accent else lockTintIdle,
+            spring(stiffness = Spring.StiffnessMediumLow), label = "st"
+        )
         Box(
             modifier = Modifier
-                .size(if (isBlocking) 72.dp else 64.dp)
+                .size(sqSize)
                 .scale(iconScale)
-                .clip(RoundedCornerShape(if (isBlocking) 20.dp else 18.dp))
-                .background(
-                    if (isBlocking) accent.copy(alpha = 0.2f)
-                    else lockBgIdle
-                )
+                .clip(RoundedCornerShape(sqCorner))
+                .background(sqBg)
                 .border(
                     width = if (isBlocking) 2.dp else 1.dp,
-                    color = if (isBlocking) accent.copy(alpha = 0.6f) else lockBorderIdle,
-                    shape = RoundedCornerShape(if (isBlocking) 20.dp else 18.dp)
+                    color = sqBorder,
+                    shape = RoundedCornerShape(sqCorner)
                 ),
             contentAlignment = Alignment.Center
         ) {
-            Icon(
-                imageVector = if (isBlocking) Icons.Default.Lock else Icons.Default.LockOpen,
-                contentDescription = null,
-                modifier = Modifier.size(if (isBlocking) 32.dp else 28.dp),
-                tint = if (isBlocking) accent else lockTintIdle
-            )
+            AnimatedContent(
+                targetState = isBlocking,
+                transitionSpec = {
+                    (scaleIn(spring(dampingRatio = Spring.DampingRatioMediumBouncy, stiffness = Spring.StiffnessMedium), initialScale = 0.6f) +
+                            fadeIn(tween(BlokMotion.Fast))) togetherWith
+                            (scaleOut(tween(BlokMotion.Fast), targetScale = 0.6f) + fadeOut(tween(BlokMotion.Fast)))
+                },
+                label = "lockIcon"
+            ) { blocking ->
+                Icon(
+                    imageVector = if (blocking) Icons.Default.Lock else Icons.Default.LockOpen,
+                    contentDescription = null,
+                    modifier = Modifier.size(if (blocking) 32.dp else 28.dp),
+                    tint = sqTint
+                )
+            }
         }
     }
 }
