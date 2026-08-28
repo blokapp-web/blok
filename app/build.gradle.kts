@@ -17,14 +17,14 @@ val hasSigning = keystoreProps.containsKey("storeFile")
 
 android {
     namespace = "com.appblocker"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.blok.app"
         minSdk = 26
-        targetSdk = 35
-        versionCode = 3
-        versionName = "1.0.2"
+        targetSdk = 36
+        versionCode = 4
+        versionName = "1.0.3"
     }
 
     signingConfigs {
